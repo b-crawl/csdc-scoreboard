@@ -9,8 +9,8 @@ import sqlalchemy.orm
 import sqlalchemy.ext.declarative  # for typing
 from sqlalchemy import func
 
-import scoreboard.constants as const
-from scoreboard.orm import (
+import constants as const
+from orm import (
     Server,
     Player,
     Species,
@@ -23,7 +23,7 @@ from scoreboard.orm import (
     Milestone,
     Account,
     Ktyp,
-    Type,
+    Verb,
 )
 
 
@@ -177,6 +177,17 @@ def setup_ktyps(s: sqlalchemy.orm.session.Session) -> None:
             print("Adding ktyp '%s'" % ktyp)
             new.append({"name": ktyp})
     s.bulk_insert_mappings(Ktyp, new)
+    s.commit()
+
+
+def setup_verbs(s: sqlalchemy.orm.session.Session) -> None:
+    """Load verb data into the database."""
+    new = []
+    for verb in const.VERBS:
+        if not s.query(Verb).filter(Verb.name == verb).first():
+            print("Adding verb '%s'" % verb)
+            new.append({"name": verb})
+    s.bulk_insert_mappings(Verb, new)
     s.commit()
 
 
@@ -342,7 +353,7 @@ def add_event(s: sqlalchemy.orm.session.Session, data: dict) -> None:
     XXX: DOES NOT COMMIT YOU MUST COMMIT (For speedy reasons)"""
     if data[type] == "begin":
         _new_game(s, data)
-    else if data[type] == "death.final":
+    elif data[type] == "death.final":
         _end_game(s, data)
     
     branch = get_branch(s, data["br"])
@@ -612,6 +623,16 @@ def count_games(
         boring=boring,
     ).count()
 
+def setup_database():
+    sess = get_session();
+    if os.environ.get('SCOREBOARD_SKIP_DB_SETUP') == None:
+        setup_species(sess)
+        setup_backgrounds(sess)
+        setup_gods(sess)
+        setup_branches(sess)
+        setup_achievements(sess)
+        setup_ktyps(sess)
+        setup_verbs(sess)
 
 def get_game(s: sqlalchemy.orm.session.Session, **kwargs: dict) -> Game:
     """Get a single game. See get_games docstring/type signature."""
