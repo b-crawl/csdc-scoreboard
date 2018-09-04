@@ -627,15 +627,15 @@ def count_games(
     ).count()
 
 def setup_database():
-    sess = get_session();
-    if os.environ.get('SCOREBOARD_SKIP_DB_SETUP') == None:
-        setup_species(sess)
-        setup_backgrounds(sess)
-        setup_gods(sess)
-        setup_branches(sess)
-        setup_achievements(sess)
-        setup_ktyps(sess)
-        setup_verbs(sess)
+    with get_session() as sess:
+        if os.environ.get('SCOREBOARD_SKIP_DB_SETUP') == None:
+            setup_species(sess)
+            setup_backgrounds(sess)
+            setup_gods(sess)
+            setup_branches(sess)
+            setup_achievements(sess)
+            setup_ktyps(sess)
+            setup_verbs(sess)
 
 def get_game(s: sqlalchemy.orm.session.Session, **kwargs: dict) -> Game:
     """Get a single game. See get_games docstring/type signature."""
