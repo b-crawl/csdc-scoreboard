@@ -1,5 +1,7 @@
 from calendar import timegm
 
+import characteristic
+
 import sqlalchemy
 from sqlalchemy import (
     Table,
@@ -14,13 +16,12 @@ from sqlalchemy import (
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
+from sqlalchemy.orm import relationship
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 import enum
 import json
-
-from . import model
 
 SQLALCHEMY_DATABASE_URI = "sqlite:///crawl.db"
 
@@ -227,11 +228,26 @@ class Game(Base):
     Columns (most are self-explanatory):
         gid: unique id for the game, comprised of "name:server:start". For
             compatibility with sequell.
+        account_id
+        account
+        player_id: denormalised and set on game creation
+        version_id
+        version
+        species_id
+        species
+        background_id
+        background
+        milestones: list of Milestone objects for the game's milestones in
+            reverse chronological order, so that milestones[0] is the latest.
+
         start: start time for the game (in UTC)
-        end: end time for the game (in UTC). Null for an ongoing game
+        end: end time for the game (in UTC). Null for an ongoing game. The
+            following fields are also null for ongoing games
 
         ktyp: dcss Ktype.
-        tmsg: description of game end
+        dam
+        sdam
+        tdam
         score
     """
 
@@ -258,7 +274,7 @@ class Game(Base):
     dam = Column(Integer, nullable=True)  # type: int
     sdam = Column(Integer, nullable=True)  # type: int
     tdam = Column(Integer, nullable=True)  # type: int
-    tmsg = Column(String(1000), nullable=True)  # type: str
+    score = Column(Integer, nullable=True)  # type: int
 
     ktyp_id = Column(Integer, ForeignKey("ktyps.id"), nullable=True)  # type: int
     ktyp = relationship("Ktyp")
@@ -307,13 +323,7 @@ class Game(Base):
             "species": self.species.name,
             "background": self.background.name,
             "char": self.char,
-            "place": self.place.as_string,
-            "god": self.god.name,
-            "xl": self.xl,
             "tmsg": self.tmsg,
-            "turns": self.turn,
-            "dur": self.dur,
-            "runes": self.runes,
             "score": self.score,
             "start": self.start.timestamp(),
             "end": self.end.timestamp(),
@@ -333,13 +343,13 @@ class Milestone(Base):
         time
         dur
         runes
-        potions_used
-        scrolls_used
+        potionsused
+        scrollsused
     """
 
     __tablename__ = "milestones"
-    id = Column(Integer, Primary_Key=True)
-    gid = Column(String(50), ForeignKey("games.id", nullable=False)) # type: str
+    id = Column(Integer, primary_key=True, nullable=False)
+    gid = Column(String(50), ForeignKey("games.gid"), nullable=False) # type: str
     game = relationship(Game, back_populates="milestones", lazy=False)
 
     place_id = Column(Integer, ForeignKey("places.id"), nullable=True)  # type: int
@@ -353,18 +363,21 @@ class Milestone(Base):
     dur = Column(Integer, nullable=True)  # type: int
     runes = Column(Integer, nullable=True)  # type: int
     time = Column(DateTime, nullable=False, index=True)  # type: DateTime
-    potions_used = Column(Integer, nullable=True)  # type: int
-    scrolls_used = Column(Integer, nullable=True)  # type: int
+    potionsused = Column(Integer, nullable=True)  # type: int
+    scrollsused = Column(Integer, nullable=True)  # type: int
 
     verb_id = Column(Integer, ForeignKey("types.id"), nullable=True)  # type: int
     verb = relationship("Type")
 
-    noun = Column(String(1000), nullable=True) # type:str
+    msg = Column(String(1000), nullable=True) # type:str
 
     def as_dict(self) -> dict:
         """Convert to a dict, for public consumption."""
         return {
-            "game": self.game.as_dict,
+            "gid": self.gid,
+            "account_name": self.game.account.name,
+            "player_name": self.game.player.name,
+            "server_name": self.game.account.server.name,
             "place": self.place.as_string,
             "god": self.god.name,
             "xl": self.xl,
@@ -374,33 +387,9 @@ class Milestone(Base):
             "verb" : self.verb.name,
             "noun" : self.noun,
             "time" : self.time.timestamp(),
-            "potions_used" : self.potions_used,
-            "scrolls_used" : self.scrolls_used
+            "potionsused" : self.potionsused,
+            "scrollsused" : self.scrollsused
         }
-
-class EventType(enum.Enum):
-    game = 'game'
-    milestone = 'milestone'
-
-# Object defs
-
-class Event(Base):
-    __tablename__ = 'event'
-    id = Column(Integer, primary_key=True)
-    type = Column(Enum(EventType), nullable=False, index=True)
-    data = Column(Text, nullable=False)
-    time = Column(DateTime, nullable=False)
-    src_abbr = Column(String(10), nullable=False)
-
-    def __repr__(self):
-        return "<Event(id={event.id}, type={event.type}, time={event.time}, src_abbr={event.src_abbr}, data={event.data})>".format(event=self)
-
-    def getDict(self):
-        return {'id': self.id,
-                'type': self.type.value,
-                'data': json.loads(self.data),
-                'time': timegm(self.time.timetuple()),
-                'src_abbr': self.src_abbr}
 
 class Logfile(Base):
     """Logfile import progress.
@@ -414,8 +403,7 @@ class Logfile(Base):
     current_key = Column(Integer, default=0, nullable=False)
 
     def __repr__(self):
-        return "<Logfile(source_url={logfile.source_url},
-    offset={logfile.current_key})>".format(logfile=self)
+        return "<Logfile(source_url={logfile.source_url}, offset={logfile.current_key})>".format(logfile=self)
 
 # End Object defs
 
