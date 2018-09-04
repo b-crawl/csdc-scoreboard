@@ -335,6 +335,64 @@ def add_games(s: sqlalchemy.orm.session.Session, games: Sequence[dict]) -> None:
     """Normalise and add multiple games to the database."""
     s.bulk_insert_mappings(Game, games)
 
+@_reraise_dberror
+def add_event(s: sqlalchemy.orm.session.Session, data: dict) -> None:
+    """Normalise and add a milestone event.
+    
+    XXX: DOES NOT COMMIT YOU MUST COMMIT (For speedy reasons)"""
+    if data[type] == "begin":
+        _new_game(s, data)
+    else if data[type] == "death.final":
+        _end_game(s, data)
+    
+    branch = get_branch(s, data["br"])
+    m = {
+        "gid"      : data["gid"],
+        "xl"       : data["xl"],
+        "place_id" : get_place(s, branch, data["lvl"]),
+        "god_id"   : get_god(s, data["god"]),
+        "turn"     : data["turn"],
+        "dur"      : data["dur"],
+        "runes"    : data["runes"],
+        "time"     : modelutils.crawl_date_to_datetime(data["time"]),
+        "potionsused": data["potionsused"],
+        "scrollsused": data["scrollsused"],
+        "verb_id"  : get_verb(s, data["verb"]).id,
+        "msg"     : data["milestone"]
+    }
+
+    s.add(Milestone(**m))
+
+
+@_reraise_dberror
+def _new_game(s: sqlalchemy.orm.session.Session, data:dict) -> None:
+    """Create a game row on game begin."""
+
+    branch = get_branch(s, data["br"])
+    server = get_server(s, data["src_abbr"])
+    g = {
+        "gid": data["gid"],
+        "account_id": get_account_id(s, data["name"], server),
+        "player_id": get_player_id(s, data["name"]),
+        "species_id": get_species(s, data["char"][:2]).id,
+        "background_id": get_species(s, data["char"][2:]).id,
+        "start": modelutils.crawl_date_to_datetime(data["start"])
+    }
+
+    s.add(Game(**g))
+
+
+@_reraise_dberror
+def _end_game(s: sqlalchemy.orm.session.Session, data:dict) -> None:
+    g = _games(s, gid=data["gid"]).first()
+
+    g.end = modelutils.crawl_date_to_datetime(data["end"])
+    g.ktyp = get_ktyp(s, data["ktyp"])
+    g.score = data["score"]
+    g.dam = data.get("dam", 0)
+    g.tdam = data.get("tdam", g.dam)
+    g.sdam = data.get("sdam", g.dam)
+    
 
 def get_logfile_progress(
     s: sqlalchemy.orm.session.Session, url: str
