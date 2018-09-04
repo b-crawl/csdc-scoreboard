@@ -2,6 +2,7 @@ from calendar import timegm
 
 import characteristic
 
+import os
 import sqlalchemy
 from sqlalchemy import (
     Table,
@@ -366,8 +367,8 @@ class Milestone(Base):
     potionsused = Column(Integer, nullable=True)  # type: int
     scrollsused = Column(Integer, nullable=True)  # type: int
 
-    verb_id = Column(Integer, ForeignKey("types.id"), nullable=True)  # type: int
-    verb = relationship("Type")
+    verb_id = Column(Integer, ForeignKey("verbs.id"), nullable=True)  # type: int
+    verb = relationship("Verb")
 
     msg = Column(String(1000), nullable=True) # type:str
 
@@ -411,14 +412,6 @@ engine = create_engine(SQLALCHEMY_DATABASE_URI)
 
 session_factory = sessionmaker(bind=engine, expire_on_commit=False, autocommit=False)
 Base.metadata.create_all(engine)
-
-if os.environ.get('SCOREBOARD_SKIP_DB_SETUP') == None:
-    model.setup_species(sess)
-    model.setup_backgrounds(sess)
-    model.setup_gods(sess)
-    model.setup_branches(sess)
-    model.setup_achievements(sess)
-    model.setup_ktyps(sess)
 
 @contextmanager
 def get_session():
