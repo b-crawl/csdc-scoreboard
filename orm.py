@@ -2,7 +2,6 @@ from calendar import timegm
 
 import characteristic
 
-import os
 import sqlalchemy
 from sqlalchemy import (
     Table,
