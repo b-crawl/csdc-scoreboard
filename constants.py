@@ -293,7 +293,8 @@ VERBS = (
     "god.renounce",
     "sacrifice",
     "ancestor.class",
-    "death",
+    "death", #felids
+    "death.final", #all others
     "monstrous",
 )
 

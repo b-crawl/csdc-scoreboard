@@ -230,16 +230,9 @@ class Game(Base):
         start: start time for the game (in UTC)
         end: end time for the game (in UTC). Null for an ongoing game
 
-        These fields are all null for ondoing games.
         ktyp: dcss Ktype.
-        xl
         tmsg: description of game end
-        turn
-        dur
-        runes
         score
-        potions_used
-        scrolls_used
     """
 
     __tablename__ = "games"
@@ -262,25 +255,10 @@ class Game(Base):
     )  # type: int
     background = relationship("Background")
 
-    place_id = Column(Integer, ForeignKey("places.id"), nullable=True)  # type: int
-    place = relationship("Place")
-
-    god_id = Column(Integer, ForeignKey("gods.id"), nullable=True)  # type: int
-    god = relationship("God")
-
-    xl = Column(Integer, nullable=True)  # type: int
     dam = Column(Integer, nullable=True)  # type: int
     sdam = Column(Integer, nullable=True)  # type: int
     tdam = Column(Integer, nullable=True)  # type: int
     tmsg = Column(String(1000), nullable=True)  # type: str
-    turn = Column(Integer, nullable=True)  # type: int
-    dur = Column(Integer, nullable=True)  # type: int
-    runes = Column(Integer, nullable=True)  # type: int
-    score = Column(Integer, nullable=True, index=True)  # type: int
-    start = Column(DateTime, nullable=False, index=True)  # type: DateTime
-    end = Column(DateTime, nullable=True, index=True)  # type: DateTime
-    potions_used = Column(Integer, nullable=True)  # type: int
-    scrolls_used = Column(Integer, nullable=True)  # type: int
 
     ktyp_id = Column(Integer, ForeignKey("ktyps.id"), nullable=True)  # type: int
     ktyp = relationship("Ktyp")
@@ -293,7 +271,7 @@ class Game(Base):
     @property
     def alive(self) -> bool:
         """Is this game still ongoing?"""
-        return self.ktyp == None
+        return self.end == None
 
     @property
     def won(self) -> bool:
