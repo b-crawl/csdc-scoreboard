@@ -227,14 +227,17 @@ class Game(Base):
     Columns (most are self-explanatory):
         gid: unique id for the game, comprised of "name:server:start". For
             compatibility with sequell.
+        start: start time for the game (in UTC)
+        end: end time for the game (in UTC). Null for an ongoing game
+
+        These fields are all null for ondoing games.
+        ktyp: dcss Ktype.
         xl
         tmsg: description of game end
         turn
         dur
         runes
         score
-        start: start time for the game (in UTC)
-        end: end time for the game (in UTC)
         potions_used
         scrolls_used
     """
@@ -282,26 +285,15 @@ class Game(Base):
     ktyp_id = Column(Integer, ForeignKey("ktyps.id"), nullable=True)  # type: int
     ktyp = relationship("Ktyp")
 
-    __table_args__ = (
-        # Used to find various highscores in model
-        # XXX: these indexes should have a sqlite_where=ktyp_id == 'winning'
-        # But these indexes can then only be added after the 'winning' ktyp is
-        # added.... chicken & egg.
-        Index("species_highscore_index", species_id, score),
-        Index("background_highscore_index", background_id, score),
-        Index("combo_highscore_index", species_id, background_id, score),
-        Index("fastest_highscore_index", ktyp_id, dur),
-        Index("shortest_highscore_index", ktyp_id, turn),
-        # Used by scoring.score_games
-        Index("unscored_games", scored, end),
-        # Used by scoring.is_grief
-        Index("first_game_index", account_id, end),
-    )
-
     @property
     def player(self) -> Player:
         """Convenience shortcut."""
         return self.account.player
+
+    @property
+    def alive(self) -> bool:
+        """Is this game still ongoing?"""
+        return self.ktyp == None
 
     @property
     def won(self) -> bool:
@@ -440,13 +432,19 @@ class Event(Base):
                 'src_abbr': self.src_abbr}
 
 class Logfile(Base):
+    """Logfile import progress.
+
+    Columns:
+        source_url: logfile source url
+        current_key: the key of the next logfile event to import.
+    """
     __tablename__ = 'logfile'
-    path = Column(String(1000), primary_key=True)
-    offset = Column(Integer, default=0, nullable=False)
+    source_url = Column(String(1000), primary_key=True)
+    current_key = Column(Integer, default=0, nullable=False)
 
     def __repr__(self):
-        return "<Logfile(path={logfile.path}, offset={logfile.offset})>".format(logfile=self)
-
+        return "<Logfile(source_url={logfile.source_url},
+    offset={logfile.current_key})>".format(logfile=self)
 
 # End Object defs
 
