@@ -10,6 +10,8 @@ import sqlalchemy.orm
 import sqlalchemy.ext.declarative  # for typing
 from sqlalchemy import func
 
+import logging
+
 import constants as const
 from orm import (
     Logfile,
@@ -144,7 +146,7 @@ def setup_species(s: sqlalchemy.orm.session.Session) -> None:
     new = []
     for sp in const.SPECIES:
         if not s.query(Species).filter(Species.short == sp.short).first():
-            print("Adding species '%s'" % sp.full)
+            logging.info("Adding species '%s'" % sp.full)
             new.append({"short": sp.short, "name": sp.full})
     s.bulk_insert_mappings(Species, new)
     s.commit()
@@ -155,7 +157,7 @@ def setup_backgrounds(s: sqlalchemy.orm.session.Session) -> None:
     new = []
     for bg in const.BACKGROUNDS:
         if not s.query(Background).filter(Background.short == bg.short).first():
-            print("Adding background '%s'" % bg.full)
+            logging.info("Adding background '%s'" % bg.full)
             new.append({"short": bg.short, "name": bg.full})
     s.bulk_insert_mappings(Background, new)
     s.commit()
@@ -166,7 +168,7 @@ def setup_gods(s: sqlalchemy.orm.session.Session) -> None:
     new = []
     for god in const.GODS:
         if not s.query(God).filter(God.name == god.name).first():
-            print("Adding god '%s'" % god.name)
+            logging.info("Adding god '%s'" % god.name)
             new.append({"name": god.name})
     s.bulk_insert_mappings(God, new)
     s.commit()
@@ -177,7 +179,7 @@ def setup_ktyps(s: sqlalchemy.orm.session.Session) -> None:
     new = []
     for ktyp in const.KTYPS:
         if not s.query(Ktyp).filter(Ktyp.name == ktyp).first():
-            print("Adding ktyp '%s'" % ktyp)
+            logging.info("Adding ktyp '%s'" % ktyp)
             new.append({"name": ktyp})
     s.bulk_insert_mappings(Ktyp, new)
     s.commit()
@@ -188,7 +190,7 @@ def setup_verbs(s: sqlalchemy.orm.session.Session) -> None:
     new = []
     for verb in const.VERBS:
         if not s.query(Verb).filter(Verb.name == verb).first():
-            print("Adding verb '%s'" % verb)
+            logging.info("Adding verb '%s'" % verb)
             new.append({"name": verb})
     s.bulk_insert_mappings(Verb, new)
     s.commit()
@@ -199,7 +201,7 @@ def setup_types(s: sqlalchemy.orm.session.Session) -> None:
     new = []
     for verb in const.VERBS:
         if not s.query(Verb).filter(Verb.name == verb).first():
-            print("Adding milestone verb '%s'" % verb)
+            logging.info("Adding milestone verb '%s'" % verb)
             new.append({"name": verb})
     s.bulk_insert_mappings(Verb, new)
     s.commit()
@@ -223,7 +225,7 @@ def setup_branches(s: sqlalchemy.orm.session.Session) -> None:
     new = []
     for br in const.BRANCHES:
         if not s.query(Branch).filter(Branch.short == br.short).first():
-            print("Adding branch '%s'" % br.full)
+            logging.info("Adding branch '%s'" % br.full)
             new.append(
                 {
                     "short": br.short,
@@ -258,8 +260,8 @@ def get_species(s: sqlalchemy.orm.session.Session, sp: str) -> Species:
         species = Species(short=sp, name=sp)
         s.add(species)
         s.commit()
-        print(
-            "Warning: Found new species %s, please add me to constants.py"
+        logging.warning(
+            "Found new species %s, please add me to constants.py"
             " and update the database." % sp
         )
         return species
@@ -275,8 +277,8 @@ def get_background(s: sqlalchemy.orm.session.Session, bg: str) -> Background:
         background = Background(short=bg, name=bg)
         s.add(background)
         s.commit()
-        print(
-            "Warning: Found new background %s, please add me to constants.py"
+        logging.warning(
+            "Found new background %s, please add me to constants.py"
             " and update the database." % bg
         )
         return background
@@ -292,8 +294,8 @@ def get_god(s: sqlalchemy.orm.session.Session, name: str) -> God:
         god = God(name=name)
         s.add(god)
         s.commit()
-        print(
-            "Warning: Found new god %s, please add me to constants.py"
+        logging.warning(
+            "Found new god %s, please add me to constants.py"
             " and update the database." % name
         )
         return god
@@ -309,7 +311,7 @@ def get_ktyp(s: sqlalchemy.orm.session.Session, name: str) -> Ktyp:
         ktyp = Ktyp(name=name)
         s.add(ktyp)
         s.commit()
-        print("Warning: Found new ktyp %s, please add me to constants.py" % name)
+        logging.warning("Found new ktyp %s, please add me to constants.py" % name)
         return ktyp
 
 
@@ -323,7 +325,7 @@ def get_verb(s: sqlalchemy.orm.session.Session, name: str) -> Ktyp:
         verb = Type(name=name)
         s.add(verb)
         s.commit()
-        print("Warning: Found new verb %s, please add me to constants.py" % name)
+        logging.warning("Found new verb %s, please add me to constants.py" % name)
         return verb
 
 @functools.lru_cache(maxsize=64)
@@ -336,8 +338,8 @@ def get_branch(s: sqlalchemy.orm.session.Session, br: str) -> Branch:
         branch = Branch(short=br, name=br, multilevel=True)
         s.add(branch)
         s.commit()
-        print(
-            "Warning: Found new branch %s, please add me to constants.py"
+        logging.warning(
+            "Found new branch %s, please add me to constants.py"
             " and update the database." % br
         )
         return branch
