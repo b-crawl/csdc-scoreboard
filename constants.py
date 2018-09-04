@@ -93,9 +93,6 @@ GODS = {
     God("Wu Jian"),
 }
 
-PLAYABLE_SPECIES = {s for s in SPECIES if s.playable}
-PLAYABLE_BACKGROUNDS = {b for b in BACKGROUNDS if b.playable}
-PLAYABLE_GODS = {g for g in GODS if g.playable}
 NONPLAYABLE_COMBOS = [
     "FeGl",
     "FeAs",
@@ -109,8 +106,8 @@ NONPLAYABLE_COMBOS = [
 ]
 PLAYABLE_COMBOS = (
     "%s%s" % (rc.short, bg.short)
-    for rc in PLAYABLE_SPECIES
-    for bg in PLAYABLE_BACKGROUNDS
+    for rc in SPECIES
+    for bg in BACKGROUNDS
     if "%s%s" % (rc, bg) not in NONPLAYABLE_COMBOS
 )
 GOD_NAME_FIXUPS = {
