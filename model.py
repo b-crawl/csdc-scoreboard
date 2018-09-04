@@ -4,6 +4,7 @@ import functools
 import datetime
 from typing import Optional, Tuple, Callable, Sequence
 
+import os
 import sqlalchemy
 import sqlalchemy.orm
 import sqlalchemy.ext.declarative  # for typing
@@ -11,6 +12,7 @@ from sqlalchemy import func
 
 import constants as const
 from orm import (
+    Logfile,
     Server,
     Player,
     Species,
@@ -24,6 +26,7 @@ from orm import (
     Account,
     Ktyp,
     Verb,
+    get_session,
 )
 
 
@@ -407,15 +410,15 @@ def _end_game(s: sqlalchemy.orm.session.Session, data:dict) -> None:
 
 def get_logfile_progress(
     s: sqlalchemy.orm.session.Session, url: str
-) -> LogfileProgress:
+) -> Logfile:
     """Get a logfile progress records, creating it if needed."""
     log = (
-        s.query(LogfileProgress).filter(LogfileProgress.source_url == url).one_or_none()
+        s.query(Logfile).filter(Logfile.source_url == url).one_or_none()
     )
     if log:
         return log
     else:
-        log = LogfileProgress(source_url=url)
+        log = Logfile(source_url=url)
         s.add(log)
         s.commit()
         return log
