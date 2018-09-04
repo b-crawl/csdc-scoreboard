@@ -145,7 +145,7 @@ def setup_species(s: sqlalchemy.orm.session.Session) -> None:
     for sp in const.SPECIES:
         if not s.query(Species).filter(Species.short == sp.short).first():
             print("Adding species '%s'" % sp.full)
-            new.append({"short": sp.short, "name": sp.full, "playable": sp.playable})
+            new.append({"short": sp.short, "name": sp.full})
     s.bulk_insert_mappings(Species, new)
     s.commit()
 
@@ -156,7 +156,7 @@ def setup_backgrounds(s: sqlalchemy.orm.session.Session) -> None:
     for bg in const.BACKGROUNDS:
         if not s.query(Background).filter(Background.short == bg.short).first():
             print("Adding background '%s'" % bg.full)
-            new.append({"short": bg.short, "name": bg.full, "playable": bg.playable})
+            new.append({"short": bg.short, "name": bg.full})
     s.bulk_insert_mappings(Background, new)
     s.commit()
 
@@ -167,7 +167,7 @@ def setup_gods(s: sqlalchemy.orm.session.Session) -> None:
     for god in const.GODS:
         if not s.query(God).filter(God.name == god.name).first():
             print("Adding god '%s'" % god.name)
-            new.append({"name": god.name, "playable": god.playable})
+            new.append({"name": god.name})
     s.bulk_insert_mappings(God, new)
     s.commit()
 
@@ -229,7 +229,6 @@ def setup_branches(s: sqlalchemy.orm.session.Session) -> None:
                     "short": br.short,
                     "name": br.full,
                     "multilevel": br.multilevel,
-                    "playable": br.playable,
                 }
             )
     s.bulk_insert_mappings(Branch, new)
@@ -256,7 +255,7 @@ def get_species(s: sqlalchemy.orm.session.Session, sp: str) -> Species:
     if species:
         return species
     else:
-        species = Species(short=sp, name=sp, playable=False)
+        species = Species(short=sp, name=sp)
         s.add(species)
         s.commit()
         print(
@@ -273,7 +272,7 @@ def get_background(s: sqlalchemy.orm.session.Session, bg: str) -> Background:
     if background:
         return background
     else:
-        background = Background(short=bg, name=bg, playable=False)
+        background = Background(short=bg, name=bg)
         s.add(background)
         s.commit()
         print(
@@ -290,7 +289,7 @@ def get_god(s: sqlalchemy.orm.session.Session, name: str) -> God:
     if god:
         return god
     else:
-        god = God(name=name, playable=False)
+        god = God(name=name)
         s.add(god)
         s.commit()
         print(
@@ -334,7 +333,7 @@ def get_branch(s: sqlalchemy.orm.session.Session, br: str) -> Branch:
     if branch:
         return branch
     else:
-        branch = Branch(short=br, name=br, multilevel=True, playable=False)
+        branch = Branch(short=br, name=br, multilevel=True)
         s.add(branch)
         s.commit()
         print(
@@ -461,51 +460,30 @@ def _generic_char_type_lister(
     s: sqlalchemy.orm.session.Session,
     *,
     cls: sqlalchemy.ext.declarative.api.DeclarativeMeta,
-    playable: Optional[bool]
 ) -> Sequence:
     q = s.query(cls)
-    if playable is not None:
-        # Type[Any] has no attribute "playable"
-        q = q.filter(
-            cls.playable == (sqlalchemy.true() if playable else sqlalchemy.false())
-        )
     return q.order_by(getattr(cls, "name")).all()
 
 
 def list_species(
-    s: sqlalchemy.orm.session.Session, *, playable: Optional[bool] = None
-) -> Sequence[Species]:
+    s: sqlalchemy.orm.session.Session, *) -> Sequence[Species]:
     """Return a list of species.
-
-    Parameters:
-        Playable: if specified, only return species with matching playable
-            status.
     """
-    return _generic_char_type_lister(s, cls=Species, playable=playable)
+    return _generic_char_type_lister(s, cls=Species)
 
 
 def list_backgrounds(
-    s: sqlalchemy.orm.session.Session, *, playable: Optional[bool] = None
-) -> Sequence[Background]:
+    s: sqlalchemy.orm.session.Session, *) -> Sequence[Background]:
     """Return a list of backgrounds.
-
-    Parameters:
-        Playable: if specified, only return species with matching playable
-            status.
     """
-    return _generic_char_type_lister(s, cls=Background, playable=playable)
+    return _generic_char_type_lister(s, cls=Background)
 
 
 def list_gods(
-    s: sqlalchemy.orm.session.Session, *, playable: Optional[bool] = None
-) -> Sequence[God]:
+    s: sqlalchemy.orm.session.Session, *) -> Sequence[God]:
     """Return a list of gods.
-
-    Parameters:
-        Playable: if specified, only return species with matching playable
-            status.
     """
-    return _generic_char_type_lister(s, cls=God, playable=playable)
+    return _generic_char_type_lister(s, cls=God)
 
 
 def _games(
