@@ -263,6 +263,9 @@ class Game(Base):
     ktyp_id = Column(Integer, ForeignKey("ktyps.id"), nullable=True)  # type: int
     ktyp = relationship("Ktyp")
 
+    milestones = relationship("Milestone", back_populates="game",
+            uselist=True, order_by="desc(Milestone.time)")
+
     @property
     def player(self) -> Player:
         """Convenience shortcut."""
@@ -276,34 +279,22 @@ class Game(Base):
     @property
     def won(self) -> bool:
         """Was this game won."""
-        return self.ktyp.name == "winning"
+        return self.ktyp and self.ktyp.name == "winning"
 
     @property
     def quit(self) -> bool:
         """Was this game quit."""
-        return self.ktyp.name == "quitting"
+        return self.ktyp and self.ktyp.name == "quitting"
 
     @property
     def boring(self) -> bool:
         """Was this game was quit, left, or wizmoded."""
-        return self.ktyp.name in ("quitting", "leaving", "wizmode")
+        return self.ktyp and self.ktyp.name in ("quitting", "leaving", "wizmode")
 
     @property
     def char(self) -> str:
         """Character code eg 'MiFi'."""
         return "{}{}".format(self.species.short, self.background.short)
-
-    @property
-    def pretty_tmsg(self) -> str:
-        """Pretty tmsg, more suitable for scoreboard display."""
-        msg = self.tmsg
-        if not msg:
-            return msg
-        if msg == "escaped with the Orb":
-            msg += "!"
-        # We don't use str.capitalize because it lower-cases all letters but
-        # the first. We just want to specifically capitalise the first letter.
-        return msg[0].upper() + msg[1:]
 
     def as_dict(self) -> dict:
         """Convert to a dict, for public consumption."""
@@ -348,8 +339,8 @@ class Milestone(Base):
 
     __tablename__ = "milestones"
     id = Column(Integer, Primary_Key=True)
-    gid = Column(String(50), ForeignKey("games.id", nullable=False)  # type: str
-    game = relationship(Game, backref=backref('milestones', uselist=True))
+    gid = Column(String(50), ForeignKey("games.id", nullable=False)) # type: str
+    game = relationship(Game, back_populates="milestones", lazy=False)
 
     place_id = Column(Integer, ForeignKey("places.id"), nullable=True)  # type: int
     place = relationship("Place")
@@ -383,6 +374,8 @@ class Milestone(Base):
             "verb" : self.verb.name,
             "noun" : self.noun,
             "time" : self.time.timestamp(),
+            "potions_used" : self.potions_used,
+            "scrolls_used" : self.scrolls_used
         }
 
 class EventType(enum.Enum):
