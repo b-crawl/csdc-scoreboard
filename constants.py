@@ -118,7 +118,6 @@ GOD_NAME_FIXUPS = {
     # ugly since the capitalisation is wrong.
     "the Shining One": "The Shining One",
 }
-BACKGROUND_SHORTNAME_FIXUPS = {"Am": "AM"}
 SPECIES_NAME_FIXUPS = {
     "Yellow Draconian": "Draconian",
     "Grey Draconian": "Draconian",
@@ -129,10 +128,6 @@ SPECIES_NAME_FIXUPS = {
     "Black Draconian": "Draconian",
     "Red Draconian": "Draconian",
     "Pale Draconian": "Draconian",
-}
-BRANCH_NAME_FIXUPS = {
-    "Vault": "Vaults",
-    "Shoal": "Shoals",
 }
 
 Branch = namedtuple("Branch", ["short", "full", "multilevel"])
