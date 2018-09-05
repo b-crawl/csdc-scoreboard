@@ -6,7 +6,7 @@ import datetime
 from typing import Optional
 
 import orm
-import constants
+import constants as const
 
 def logline_to_dict(logline: str) -> dict:
     """Convert a logline into a sanitized dict"""
@@ -19,15 +19,18 @@ def logline_to_dict(logline: str) -> dict:
             data[keyval[0]] = keyval[1]
         except IndexError as e:
             logging.error('error "{}" in keyval "{}", logline "{}"'.format(e,keyval,logline))
-    data["v"] = re.match(r"(0.\d+)", game["v"]).group()
+    data["v"] = re.match(r"(0.\d+)", data["v"]).group()
     if "god" not in data:
         data["god"] = "GOD_NO_GOD"
 
     data["god"] = const.GOD_NAME_FIXUPS.get(data["god"],data["god"])
-    data["ktyp"] = const.KTYP_FIXUPS.get(data["ktyp"], data["ktyp"])
     if "end" in data:
-        data["verb"] = "death.final"
+        data["time"] = data["end"]
+        data["ktyp"] = const.KTYP_FIXUPS.get(data["ktyp"], data["ktyp"])
+        data["type"] = "death.final"
         data["milestone"] = data["tmsg"]
+
+    data["runes"] = data.get("urune", 0)
 
     return data
 
