@@ -66,7 +66,7 @@ BACKGROUNDS = {
 
 GODS = {
     God("Ashenzari"),
-    God("Atheist"),
+    God("GOD_NO_GOD"),
     God("Beogh"),
     God("Cheibriados"),
     God("Dithmenos"),
@@ -283,6 +283,7 @@ VERBS = (
     "god.maxpiety",
     "god.ecumenical",
     "god.renounce",
+    "god.mollify",
     "sacrifice",
     "ancestor.class",
     "death", #felids
