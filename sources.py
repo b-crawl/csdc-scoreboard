@@ -23,31 +23,20 @@ IGNORED_FILES_REGEX = re.compile(
 )
 
 
-def sources(src: dict) -> Iterable[str]:
+def sources(src: dict) -> dict:
     """Return a full, raw listing of logfile/milestone URLs for a given src dict.
 
     Expands bash style '{a,b}{1,2}' strings into all their permutations.
     Excludes URLs that match IGNORED_FILES_REGEX.
     """
-    expanded_sources = []  # type: list
+    expanded_sources = {}  # type: list
     if not src['base'].endswith('/'):
         src['base'] += '/'
-    for line in src['logs']:
-        # Some entries are dicts of the form { 'pattern': 'explbr'}
-        # So when we want to support non-vanilla branches this will have to
-        # be supported
-        if not isinstance(line, str):
-            continue
-        # We don't support using autoindex folders to download wildcard file
-        # names, luckily only a few weird files are affected so we just ignore
-        # them until someone complains.
-        line = line.replace('*', '')
-        expanded_sources.extend(braceexpand(line))
-    for line in expanded_sources:
-        entry = "{}{}".format(src['base'], line)
-        if re.search(IGNORED_FILES_REGEX, entry):
-            continue
-        yield entry
+
+    for x in ["milestones", "logfile"]:
+        expanded_sources[x] = "{}{}".format(src['base'], src[x])
+
+    return expanded_sources
 
 def source_yaml(sources_yaml_path: str) -> dict:
     rawpath = os.path.join(os.path.dirname(__file__), sources_yaml_path)
@@ -66,7 +55,7 @@ def source_data(sources_yaml_path: str) -> dict:
     out = {}
     raw_yaml = source_yaml(sources_yaml_path)
     for src in raw_yaml['sources']:
-        out[src['name']] = tuple(sources(src))
+        out[src['name']] = sources(src)
     return out
 
 
