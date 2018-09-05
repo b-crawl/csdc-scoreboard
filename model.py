@@ -11,6 +11,7 @@ import sqlalchemy.ext.declarative  # for typing
 from sqlalchemy import func
 
 import logging
+import modelutils
 
 import constants as const
 from orm import (
@@ -196,17 +197,6 @@ def setup_verbs(s: sqlalchemy.orm.session.Session) -> None:
     s.commit()
 
 
-def setup_types(s: sqlalchemy.orm.session.Session) -> None:
-    """Load milestone type data into the database."""
-    new = []
-    for verb in const.VERBS:
-        if not s.query(Verb).filter(Verb.name == verb).first():
-            logging.info("Adding milestone verb '%s'" % verb)
-            new.append({"name": verb})
-    s.bulk_insert_mappings(Verb, new)
-    s.commit()
-
-
 @functools.lru_cache(maxsize=32)
 def get_version(s: sqlalchemy.orm.session.Session, v: str) -> Version:
     """Get a version, creating it if needed."""
@@ -214,6 +204,7 @@ def get_version(s: sqlalchemy.orm.session.Session, v: str) -> Version:
     if version:
         return version
     else:
+        logging.info("Adding version '%s'" % v)
         version = Version(v=v)
         s.add(version)
         s.commit()
@@ -318,11 +309,11 @@ def get_ktyp(s: sqlalchemy.orm.session.Session, name: str) -> Ktyp:
 @functools.lru_cache(maxsize=64)
 def get_verb(s: sqlalchemy.orm.session.Session, name: str) -> Ktyp:
     """Get a verb/type by name, creating it if needed."""
-    verb = s.query(Type).filter(Type.name == name).first()
+    verb = s.query(Verb).filter(Verb.name == name).first()
     if verb:
         return verb
     else:
-        verb = Type(name=name)
+        verb = Verb(name=name)
         s.add(verb)
         s.commit()
         logging.warning("Found new verb %s, please add me to constants.py" % name)
@@ -355,24 +346,26 @@ def add_event(s: sqlalchemy.orm.session.Session, data: dict) -> None:
     """Normalise and add a milestone event.
     
     XXX: DOES NOT COMMIT YOU MUST COMMIT (For speedy reasons)"""
-    if data[type] == "begin":
+    data["gid"] = "%s:%s:%s" % (data["name"], data["src_abbr"], data["start"])
+
+    if data["type"] == "begin":
         _new_game(s, data)
-    elif data[type] == "death.final":
+    elif data["type"] == "death.final":
         _end_game(s, data)
     
     branch = get_branch(s, data["br"])
     m = {
         "gid"      : data["gid"],
         "xl"       : data["xl"],
-        "place_id" : get_place(s, branch, data["lvl"]),
-        "god_id"   : get_god(s, data["god"]),
+        "place_id" : get_place(s, branch, data["lvl"]).id,
+        "god_id"   : get_god(s, data["god"]).id,
         "turn"     : data["turn"],
         "dur"      : data["dur"],
         "runes"    : data["runes"],
         "time"     : modelutils.crawl_date_to_datetime(data["time"]),
         "potionsused": data["potionsused"],
         "scrollsused": data["scrollsused"],
-        "verb_id"  : get_verb(s, data["verb"]).id,
+        "verb_id"  : get_verb(s, data["type"]).id,
         "msg"     : data["milestone"]
     }
 
@@ -390,7 +383,8 @@ def _new_game(s: sqlalchemy.orm.session.Session, data:dict) -> None:
         "account_id": get_account_id(s, data["name"], server),
         "player_id": get_player_id(s, data["name"]),
         "species_id": get_species(s, data["char"][:2]).id,
-        "background_id": get_species(s, data["char"][2:]).id,
+        "background_id": get_background(s, data["char"][2:]).id,
+        "version_id": get_version(s, data["v"]).id,
         "start": modelutils.crawl_date_to_datetime(data["start"])
     }
 
@@ -403,7 +397,7 @@ def _end_game(s: sqlalchemy.orm.session.Session, data:dict) -> None:
 
     g.end = modelutils.crawl_date_to_datetime(data["end"])
     g.ktyp = get_ktyp(s, data["ktyp"])
-    g.score = data["score"]
+    g.score = data["sc"]
     g.dam = data.get("dam", 0)
     g.tdam = data.get("tdam", g.dam)
     g.sdam = data.get("sdam", g.dam)
@@ -468,21 +462,21 @@ def _generic_char_type_lister(
 
 
 def list_species(
-    s: sqlalchemy.orm.session.Session, *) -> Sequence[Species]:
+    s: sqlalchemy.orm.session.Session) -> Sequence[Species]:
     """Return a list of species.
     """
     return _generic_char_type_lister(s, cls=Species)
 
 
 def list_backgrounds(
-    s: sqlalchemy.orm.session.Session, *) -> Sequence[Background]:
+    s: sqlalchemy.orm.session.Session) -> Sequence[Background]:
     """Return a list of backgrounds.
     """
     return _generic_char_type_lister(s, cls=Background)
 
 
 def list_gods(
-    s: sqlalchemy.orm.session.Session, *) -> Sequence[God]:
+    s: sqlalchemy.orm.session.Session) -> Sequence[God]:
     """Return a list of gods.
     """
     return _generic_char_type_lister(s, cls=God)
@@ -613,7 +607,6 @@ def setup_database():
             setup_backgrounds(sess)
             setup_gods(sess)
             setup_branches(sess)
-            setup_achievements(sess)
             setup_ktyps(sess)
             setup_verbs(sess)
 
