@@ -271,6 +271,9 @@ class Game(Base):
     )  # type: int
     background = relationship("Background")
 
+    start = Column(DateTime, nullable=False, index=True)  # type: DateTime
+    end = Column(DateTime, nullable=True, index=True)  # type: DateTime
+
     dam = Column(Integer, nullable=True)  # type: int
     sdam = Column(Integer, nullable=True)  # type: int
     tdam = Column(Integer, nullable=True)  # type: int
