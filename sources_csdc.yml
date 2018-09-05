@@ -1,56 +1,50 @@
 sources:
   - name: cao
     base: http://crawl.akrasiac.org
-
-    # Annotations: standard glob {} expansion is applied. Files
-    # flagged * are assumed to be logfiles that are currently being
-    # updated and will be refetched, always. Files without * are
-    # assumed to be dead versions, and will be fetched only if the
-    # local copy is missing.
-    logs:
-      - '{logfile,milestones}22*'
+    milestones: 'milestones22'
+    logfile: 'logfile22'
 
   - name: cdo
     base: http://crawl.develz.org
-    logs:
-      - '{allgames,milestones}-0.22.txt*'
+    milestones: 'milestones-0.22.txt'
+    logfile: 'allgames-0.22.txt'
 
   - name: cue
     aliases:
       - cln
       - clan
     base: http://underhound.eu:81/crawl/meta
-    logs:
-      - '0.22/{logfile,milestones}*'
+    logfile: '0.22/logfile'
+    milestones: '0.22/milestones'
 
   - name: cwz
     base: http://webzook.net/soup
-    logs:
-      - '0.22/{logfile,milestones}*'
+    logfile: '0.22/logfile'
+    milestones: '0.22/milestones'
 
   - name: cbro
     aliases:
       - cbo
-    base: http://crawl.berotato.org/crawl
-    logs:
-      - 'meta/0.22/{logfile,milestones}*'
+    base: http://crawl.berotato.org/crawl/meta
+    logfile: '0.22/logfile'
+    milestones: '0.22/milestones'
 
   - name: cxc
     base: http://crawl.xtahua.com/crawl/meta
-    logs:
-      - '0.22/{logfile,milestones}*'
+    logfile: '0.22/logfile'
+    milestones: '0.22/milestones'
 
   - name: lld
     base: http://lazy-life.ddo.jp/mirror/meta
-    logs:
-      - '0.22/{logfile,milestones}*'
+    logfile: '0.22/logfile'
+    milestones: '0.22/milestones'
 
   - name: cpo
     base: https://crawl.project357.org
-    logs:
-      - dcss-{milestones,logfiles}-0.22*
+    logfile: 'dcss-logfiles-0.22'
+    milestones: 'dcss-milestones-0.22'
 
   - name: cjr
     base: https://crawl.jorgrun.rocks/meta
-    logs:
-      - '0.22/{milestones,logfile}*'
+    logfile: '0.22/logfile'
+    milestones: '0.22/milestones'
