@@ -124,7 +124,7 @@ def download_sources(sources_yaml_path: str, dest: str, servers: Optional[str]=N
         destdir = os.path.join(dest, src)
         if not os.path.exists(destdir):
             os.mkdir(destdir)
-        jobs.append(p.apply_async(download_source_files, (urls, destdir)))
+        jobs.append(p.apply_async(download_source_files, (list(urls.values()), destdir)))
     for job in jobs:
         job.get()
     p.close()
