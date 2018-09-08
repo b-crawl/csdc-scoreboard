@@ -86,7 +86,6 @@ class Player(Base):
     __tablename__ = "players"
     id = Column(Integer, primary_key=True, nullable=False)  # type: int
     name = Column(String(20), unique=True, nullable=False)  # type: str
-    page_updated = Column(DateTime, nullable=False, index=True)  # type: DateTime
     accounts = relationship("Account", back_populates="player")  # type: list
 
     @property
@@ -340,14 +339,16 @@ class Milestone(Base):
         gid: unique id for the game, comprised of "name:server:start". For
             compatibility with sequell.
         xl
-        place
-        god
+        place_id where the player is now
+        oplace_id where the player was when this was triggered
+        god_id
         turn
         time
         dur
         runes
         potionsused
         scrollsused
+        verb_id
     """
 
     __tablename__ = "milestones"
@@ -356,7 +357,9 @@ class Milestone(Base):
     game = relationship(Game, back_populates="milestones", lazy=False)
 
     place_id = Column(Integer, ForeignKey("places.id"), nullable=True)  # type: int
-    place = relationship("Place")
+    place = relationship("Place", foreign_keys=place_id)
+    oplace_id = Column(Integer, ForeignKey("places.id"), nullable=True)  # type: int
+    oplace = relationship("Place", foreign_keys=oplace_id)
 
     god_id = Column(Integer, ForeignKey("gods.id"), nullable=True)  # type: int
     god = relationship("God")
@@ -373,6 +376,11 @@ class Milestone(Base):
     verb = relationship("Verb")
 
     msg = Column(String(1000), nullable=True) # type:str
+
+    __table_args__ = (
+            # Used to get milestones in order (and find the latest ones)
+            Index("gid_time", gid, time),
+        )
 
     def as_dict(self) -> dict:
         """Convert to a dict, for public consumption."""

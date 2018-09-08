@@ -136,7 +136,7 @@ def get_player_id(s: sqlalchemy.orm.session.Session, name: str) -> Player:
 
 
 def _add_player(s, name: str) -> Player:
-    player = Player(name=name, page_updated=datetime.datetime.now())
+    player = Player(name=name) 
     s.add(player)
     s.commit()
     return player
@@ -239,6 +239,13 @@ def get_place(s: sqlalchemy.orm.session.Session, branch: Branch, lvl: int) -> Pl
         s.add(place)
         s.commit()
         return place
+
+
+@functools.lru_cache(maxsize=256)
+def get_place_from_string(s: sqlalchemy.orm.session.Session, spot: str) -> Place:
+    """Get a place in crawl Place:Lev string format"""
+    code = spot.split(":") + [1]; # default to lvl 1 if missing 
+    return get_place(s, get_branch(s, code[0]), int(code[1]));
 
 
 @functools.lru_cache(maxsize=64)
@@ -358,6 +365,7 @@ def add_event(s: sqlalchemy.orm.session.Session, data: dict) -> None:
         "gid"      : data["gid"],
         "xl"       : data["xl"],
         "place_id" : get_place(s, branch, data["lvl"]).id,
+        "oplace_id" : get_place_from_string(s, data["oplace"]).id,
         "god_id"   : get_god(s, data["god"]).id,
         "turn"     : data["turn"],
         "dur"      : data["dur"],

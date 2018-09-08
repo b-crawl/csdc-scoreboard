@@ -31,6 +31,9 @@ def logline_to_dict(logline: str) -> dict:
         data["milestone"] = data["tmsg"]
 
     data["runes"] = data.get("urune", 0)
+    # D:0 is D:$ in logfile so we came from D:1 in that case
+    data["oplace"] = data.get("oplace",
+            data["place"].translate(str.maketrans("$", "1")))
 
     return data
 
