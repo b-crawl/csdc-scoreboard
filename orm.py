@@ -212,6 +212,7 @@ class Ktyp(Base):
     id = Column(Integer, primary_key=True, nullable=False)  # type: int
     name = Column(String(20), nullable=False, index=True, unique=True)  # type: str
 
+
 @characteristic.with_repr(["name"])  # pylint: disable=too-few-public-methods
 class Verb(Base):
     """A DCSS milestone verb (rune, orb, etc)."""
@@ -219,6 +220,16 @@ class Verb(Base):
     __tablename__ = "verbs"
     id = Column(Integer, primary_key=True, nullable=False)  # type: int
     name = Column(String(20), nullable=False, index=True, unique=True)  # type: str
+
+
+@characteristic.with_repr(["name"])
+class Skill(Base):
+    """A DCSS Skill."""
+
+    __tablename__ = "skills"
+    id = Column(Integer, primary_key=True, nullable=False) #type: int
+    name = Column(String(20), nullable=False, index=True, unique=True)
+
 
 @characteristic.with_repr(["gid"])  # pylint: disable=too-few-public-methods
 class Game(Base):
@@ -284,6 +295,10 @@ class Game(Base):
     milestones = relationship("Milestone", back_populates="game",
             uselist=True, order_by="desc(Milestone.time)")
 
+    __table_args__ = (
+            Index("ix_games_player_start", player_id, start),
+        )
+
     @property
     def player(self) -> Player:
         """Convenience shortcut."""
@@ -348,6 +363,8 @@ class Milestone(Base):
         runes
         potionsused
         scrollsused
+        skill_id
+        sklev
         verb_id
     """
 
@@ -372,6 +389,10 @@ class Milestone(Base):
     potionsused = Column(Integer, nullable=True)  # type: int
     scrollsused = Column(Integer, nullable=True)  # type: int
 
+    skill_id = Column(Integer, ForeignKey("skills.id"), nullable=True)
+    skill = relationship("Skill")
+    sklev = Column(Integer, nullable=True)
+
     verb_id = Column(Integer, ForeignKey("verbs.id"), nullable=True)  # type: int
     verb = relationship("Verb")
 
@@ -379,7 +400,7 @@ class Milestone(Base):
 
     __table_args__ = (
             # Used to get milestones in order (and find the latest ones)
-            Index("gid_time", gid, time),
+            Index("ix_milestones_gid_time", gid, time),
         )
 
     def as_dict(self) -> dict:

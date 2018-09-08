@@ -29,6 +29,7 @@ from orm import (
     Account,
     Ktyp,
     Verb,
+    Skill,
     get_session,
 )
 
@@ -197,6 +198,17 @@ def setup_verbs(s: sqlalchemy.orm.session.Session) -> None:
     s.commit()
 
 
+def setup_skills(s: sqlalchemy.orm.session.Session) -> None:
+    """Load skill data into the database."""
+    new = []
+    for sk in const.SKILLS:
+        if not s.query(Skill).filter(Skill.name == sk).first():
+            logging.info("Adding skill '%s'" % sk)
+            new.append({"name": sk})
+    s.bulk_insert_mappings(Skill, new)
+    s.commit()
+
+
 @functools.lru_cache(maxsize=32)
 def get_version(s: sqlalchemy.orm.session.Session, v: str) -> Version:
     """Get a version, creating it if needed."""
@@ -326,6 +338,7 @@ def get_verb(s: sqlalchemy.orm.session.Session, name: str) -> Ktyp:
         logging.warning("Found new verb %s, please add me to constants.py" % name)
         return verb
 
+
 @functools.lru_cache(maxsize=64)
 def get_branch(s: sqlalchemy.orm.session.Session, br: str) -> Branch:
     """Get a branch by short name, creating it if needed."""
@@ -341,6 +354,20 @@ def get_branch(s: sqlalchemy.orm.session.Session, br: str) -> Branch:
             " and update the database." % br
         )
         return branch
+
+
+@functools.lru_cache(maxsize=64)
+def get_skill(s: sqlalchemy.orm.session.Session, name: str) -> Ktyp:
+    """Get a verb/type by name, creating it if needed."""
+    skill = s.query(Skill).filter(Skill.name == name).first()
+    if skill:
+        return skill
+    else:
+        skill = Skill(name=name)
+        s.add(skill)
+        s.commit()
+        logging.warning("Found new skill %s, please add me to constants.py" % name)
+        return skill
 
 
 @_reraise_dberror
@@ -373,6 +400,8 @@ def add_event(s: sqlalchemy.orm.session.Session, data: dict) -> None:
         "time"     : modelutils.crawl_date_to_datetime(data["time"]),
         "potionsused": data["potionsused"],
         "scrollsused": data["scrollsused"],
+        "skill_id" : get_skill(s, data["sk"]).id,
+        "sklev"    : data["sklev"],
         "verb_id"  : get_verb(s, data["type"]).id,
         "msg"     : data["milestone"]
     }
@@ -617,6 +646,7 @@ def setup_database():
             setup_branches(sess)
             setup_ktyps(sess)
             setup_verbs(sess)
+            setup_skills(sess)
 
 def get_game(s: sqlalchemy.orm.session.Session, **kwargs: dict) -> Game:
     """Get a single game. See get_games docstring/type signature."""
