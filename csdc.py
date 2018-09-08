@@ -27,25 +27,51 @@ from orm import (
     get_session,
 )
 
-from sqlalchemy import asc, desc, func
+from sqlalchemy import asc, desc, func, type_coerce, Integer
 from sqlalchemy.sql import and_, or_
 from sqlalchemy.orm.query import (
     aliased,
     Query
 )
 
+def _champion_god(milestones, god):
+    """Query if the supplied god get championed in the provided milestone set"""
+    with get_session() as s:
+        worship_id = get_verb(s, "god.worship").id
+        champ_id = get_verb(s, "god.maxpiety").id
+    maxpiety = milestones.filter(
+                Milestone.god_id == god.id,
+                Milestone.verb_id == champ_id
+            ).exists()
+    worship = milestones.filter(
+                Milestone.god_id == god.id,
+                Milestone.verb_id == worship_id
+            ).exists()
+    neverworship = ~milestones.filter(
+                Milestone.verb_id == worship_id
+            ).exists()
+
+    champion_conditions = {
+        "GOD_NO_GOD" : neverworship,
+        "Xom" : worship,
+        "Gozag" : worship
+    }
+
+    return champion_conditions.get(god.name, maxpiety)
+
+
 class CsdcWeek:
     """A csdc week
 
     This object generates the queries needed to score a csdc week"""
-    
+
     def _valid_games(self, alias):
         """Query the gids in an alias for the Games table for the valid ones
 
         There are a lot of games but not that many in a given time window,
         there is a good index for this filter, so even if it is implied one
         should endavour to use it.
-        
+ 
         add_columns can specify further columns, but as-is this is hit by a
         covering index"""
         return Query(alias.gid).filter(
@@ -125,14 +151,8 @@ class CsdcWeek:
             abandon_id = get_verb(s, "god.renounce").id
         god_ids = [g.id for g in self.gods]
         return and_(
-            self._valid_milestone().filter(
-                ~Milestone.god_id.in_(god_ids),
-                Milestone.verb_id == worship_id
-            ).exists(),
-            self._valid_milestone().filter(
-                Milestone.god_id.in_(god_ids),
-                Milestone.verb_id == champ_id
-            ).exists(),
+            or_(*[_champion_god(self._valid_milestone(), g) for g in
+                self.gods]),
             ~self._valid_milestone().filter(
                 Milestone.verb_id == abandon_id
             ).exists())
@@ -146,18 +166,38 @@ class CsdcWeek:
         with get_session() as s:
             ktyp_id = get_ktyp(s, "winning").id
 
-        return Query(Game.ktyp_id == ktyp_id)
+        return Query(type_coerce(Game.ktyp_id == ktyp_id, Integer))
 
     def scorecard(self):
-        return Query([Game.gid, Game.player_id, 
-            self._uniq().label("uniq"),
-            self._brenter().label("brenter"),
-            self._brend().label("brend"),
-            self._god().label("god"),
-            self._rune(1).label("rune"),
-            self._rune(3).label("threerune"),
-            self._win().label("win")]
-        ).filter(Game.gid.in_(self.gids))
+        sc = Query([Game.gid,
+            Game.player_id,
+            type_coerce(self._uniq(), Integer).label("uniq"),
+            type_coerce(self._brenter(), Integer).label("brenter"),
+            type_coerce(self._brend(), Integer).label("brend"),
+            type_coerce(self._god(), Integer).label("god"),
+            type_coerce(self._rune(1), Integer).label("rune"),
+            type_coerce(self._rune(3), Integer).label("threerune"),
+            self._win().label("win")
+        ]).filter(Game.gid.in_(self.gids)).subquery()
+
+        return Query(Game).select_from(sc).join(Game,
+                Game.gid == sc.c.gid).add_columns(
+                    sc.c.uniq,
+                    sc.c.brenter,
+                    sc.c.brend,
+                    sc.c.god,
+                    sc.c.rune,
+                    sc.c.threerune,
+                    sc.c.win,
+                    func.max(
+                        sc.c.uniq
+                        + sc.c.brenter
+                        + sc.c.brend
+                        + sc.c.god
+                        + sc.c.rune
+                        + sc.c.threerune
+                    ).label("total")
+                ).group_by(sc.c.player_id).order_by(desc("total"))
 
 if __name__=='__main__':
     wk = CsdcWeek(1, "DE", "En", ("Sif Muna", "Xom", "GOD_NO_GOD"),
