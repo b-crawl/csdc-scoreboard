@@ -8,7 +8,7 @@ import os
 import sqlalchemy
 import sqlalchemy.orm
 import sqlalchemy.ext.declarative  # for typing
-from sqlalchemy import func
+from sqlalchemy import func, asc, desc
 
 import logging
 import modelutils
@@ -656,3 +656,13 @@ def get_game(s: sqlalchemy.orm.session.Session, **kwargs: dict) -> Game:
         return None
     else:
         return result[0]
+
+milestones_alias = sqlalchemy.orm.aliased(Milestone)
+latestmilestone_gid = sqlalchemy.orm.query.Query(milestones_alias.id).filter(
+            milestones_alias.gid == Milestone.gid
+        ).order_by(
+            desc(milestones_alias.time)
+        ).limit(1)
+latestmilestones = sqlalchemy.orm.query.Query(Milestone).filter(
+          Milestone.id.in_(latestmilestone_gid)
+      ).cte(name="latestmilestones")
