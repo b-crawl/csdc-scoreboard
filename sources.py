@@ -11,7 +11,6 @@ from typing import Optional, Iterable, Sequence
 import logging
 
 import yaml
-from braceexpand import braceexpand
 
 SIMULTANEOUS_DOWNLOADS = 10
 WGET_NAME = 'wget.exe' if sys.platform == 'win32' else 'wget'
