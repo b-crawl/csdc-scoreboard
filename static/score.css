@@ -1,48 +1,108 @@
+
+/* Zot colours:
+ * Purple HiLite: #FF66FF
+ * Purple Dark: #660066
+ * Purple Vdar: #303
+ * Gold hilite: #fc3
+ * Gold center: #CC9900
+ * Gold dark: #993300
+ * Text grey: #9cf
+ * Text grey 2: #69c*/
 html, body {
     margin: 0;
+    background-color: #202;
+    color: #ccc;
+    font-family: sans-serif;
 }
-h1 {
+
+#logo {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#sdc {
+	margin-top: -40px;
+	font-variant: small-caps;
+	font-size: 36pt;
+	margin-bottom: -20px;
+}
+#title {
     width: 100%;
-    background-color: #ccc;
+    background-color: #202;
+    color: #eb2;
     text-align: center;
+}
+
+#content {
+    margin-bottom: 40px;
+}
+
+a {
+    color: #ccc;
 }
 #combo, #bonus, #gods {
     margin-left: 10px;
+    font-size: 14pt;
 }
+
 .label {
 	font-weight: bold;
 }
+
 table {
-    margin: 10px;
-    width: calc(100% - 20px);
+    margin: 30px;
+    width: calc(100% - 60px);
     border-collapse: collapse;
 }
 td.pt, td.total {
-    text-align: right;
+	text-align: center;
 }
 td, th {
 	padding-left: 10px;
 	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-top: 5px;
 }
+
+th {
+	vertical-align: top;
+}
+
+tr.head {
+	font-size: 14pt;
+	border-bottom: 3px solid #669;
+}
+
+tr {
+	background-color: #606;
+}
+tr:nth-child(even) {
+	background-color: #303;
+}
+
 tr.won {
-  background-color: #dfd;
+  background-color: #363;
+  font-weight: bold;
 }
 tr.won:nth-child(even) {
-  background-color: #cfc;
+  background-color: #002A00;
 }
 tr.dead {
-  background-color: #fdd;
+  background-color: #711;
 }
 tr.dead:nth-child(even) {
-  background-color: #fcc;
+  background-color: #450000;
 }
-tr.alive:nth-child(even) {background-color: #eee;}
+tr.alive {background-color: #383338}
+tr.alive:nth-child(even) {background-color: #1F1A1F;}
+
 #updatetime {
     position: fixed;
     right: 0;
     bottom: 0;
     width: 100%;
     padding-right: 10px;
-    background-color: #ccc;
+    background-color: #303;
     text-align: right;
 }
