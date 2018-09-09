@@ -440,6 +440,16 @@ class Logfile(Base):
     def __repr__(self):
         return "<Logfile(source_url={logfile.source_url}, offset={logfile.current_key})>".format(logfile=self)
 
+
+class CsdcContestant(Base):
+    """CSDC Contestant"""
+
+    __tablename__ = 'contestants'
+    player_id = Column(Integer, ForeignKey("players.id"), Nullable=False,
+            unique=True)
+    player = relationship("Player")
+    division = Column(Integer, Nullable=False)
+
 # End Object defs
 
 session_factory = None
