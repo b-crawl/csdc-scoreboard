@@ -176,7 +176,9 @@ class CsdcWeek:
         with get_session() as s:
             ktyp_id = get_ktyp(s, "winning").id
 
-        return type_coerce(and_(Game.ktyp_id != None, Game.ktyp_id == ktyp_id), Integer)
+        return type_coerce(and_(Game.ktyp_id != None, 
+            Game.ktyp_id == ktyp_id,
+            Game.end <= self.end), Integer)
 
     def _bonus(self, bonus):
         """in principle we support more than two bonuses"""
@@ -264,8 +266,8 @@ def initialize_weeks():
             species = "Mi",
             background = "Be",
             gods = ("Trog",),
-            start = datetime.datetime(2018,8,1),
-            end = datetime.datetime(2018,9,11)))
+            start = datetime.datetime(2018,8,10),
+            end = datetime.datetime(2018,8,15)))
 
 
 def score(wk):
