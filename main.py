@@ -27,6 +27,7 @@ if __name__=='__main__':
     
     t_i = time.time()
     csdc.initialize_weeks()
+    oldmask = os.umask(18)
     for wk in csdc.weeks:
         scorepage = os.path.join(CONFIG['www dir'],"{}.html".format(wk.number))
 
@@ -34,3 +35,4 @@ if __name__=='__main__':
             f.write(csdc.score(wk))
     logging.info("Rebuilt score pages in {} seconds.".format(time.time() -
         t_i))
+    os.umask(oldmask)
