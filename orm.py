@@ -308,6 +308,11 @@ class Game(Base):
         return self.end == None
 
     @property
+    def latestmilestone(self):
+        """shortcut"""
+        return self.milestones[0]
+
+    @property
     def won(self) -> bool:
         """Was this game won."""
         return self.ktyp != None and self.ktyp.name == "winning"
