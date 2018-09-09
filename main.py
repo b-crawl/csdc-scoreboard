@@ -25,4 +25,8 @@ if __name__=='__main__':
     refresh.refresh(CONFIG['sources file'], SOURCES_DIR)
     
     csdc.initialize_weeks()
-    print(csdc.score(csdc.weeks[0]))
+    for wk in csdc.weeks:
+        scorepage = os.path.join(CONFIG['www dir'],"{}.html".format(wk.number))
+
+        with open(scorepage, 'w') as f:
+            f.write(csdc.score(wk))
