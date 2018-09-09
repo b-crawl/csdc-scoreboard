@@ -1,4 +1,5 @@
 import datetime
+from collections import namedtuple
 from model import (
     latestmilestones,
     get_species,
@@ -27,12 +28,17 @@ from orm import (
     get_session,
 )
 
-from sqlalchemy import asc, desc, func, type_coerce, Integer
+from sqlalchemy import asc, desc, func, type_coerce, Integer, literal
 from sqlalchemy.sql import and_, or_
 from sqlalchemy.orm.query import (
     aliased,
     Query
 )
+
+CsdcBonus = namedtuple("CsdcBonus", ["name", "description", "query"])
+# The query here must be a scalar query, see no bonus for the example.
+
+NoBonus = CsdcBonus("NoBonus","No bonus",Query(literal(0)).as_scalar())
 
 def _champion_god(milestones, god):
     """Query if the supplied god get championed in the provided milestone set"""
@@ -82,14 +88,16 @@ class CsdcWeek:
             )
 
 
-    def __init__(self, number, species, background, gods, start, end):
+    def __init__(self, **kwargs):
         with get_session() as s:
-            self.number = number
-            self.species = get_species(s, species)
-            self.background = get_background(s, background)
-            self.gods = [ get_god(s, g) for g in gods ]
-            self.start = start
-            self.end = end
+            self.number = kwargs["number"]
+            self.species = get_species(s, kwargs["species"])
+            self.background = get_background(s, kwargs["background"])
+            self.gods = [ get_god(s, g) for g in kwargs["gods"] ]
+            self.start = kwargs["start"]
+            self.end = kwargs["end"]
+            self.tier1 = kwargs.get("bonus1", NoBonus)
+            self.tier2 = kwargs.get("bonus2", NoBonus)
 
         g1 = aliased(Game)
         g2 = aliased(Game)
@@ -177,7 +185,9 @@ class CsdcWeek:
             type_coerce(self._god(), Integer).label("god"),
             type_coerce(self._rune(1), Integer).label("rune"),
             type_coerce(self._rune(3), Integer).label("threerune"),
-            self._win().label("win")
+            self._win().label("win"),
+            self.tier1.query.label("bonusone"),
+            self.tier2.query.__mul__(2).label("bonustwo"),
         ]).filter(Game.gid.in_(self.gids)).subquery()
 
         return Query(Game).select_from(sc).join(Game,
@@ -189,6 +199,8 @@ class CsdcWeek:
                     sc.c.rune,
                     sc.c.threerune,
                     sc.c.win,
+                    sc.c.bonusone,
+                    sc.c.bonustwo,
                     func.max(
                         sc.c.uniq
                         + sc.c.brenter
@@ -196,12 +208,19 @@ class CsdcWeek:
                         + sc.c.god
                         + sc.c.rune
                         + sc.c.threerune
+                        + sc.c.bonusone
+                        + sc.c.bonustwo
                     ).label("total")
                 ).group_by(sc.c.player_id).order_by(desc("total"))
 
 if __name__=='__main__':
-    wk = CsdcWeek(1, "DE", "En", ("Sif Muna", "Xom", "GOD_NO_GOD"),
-            datetime.datetime(2018,9,4), datetime.datetime(2018,9,11));
+    wk = CsdcWeek(
+            number = 1,
+            species = "DE",
+            background = "En",
+            gods = ("Sif Muna", "Xom", "GOD_NO_GOD"),
+            start = datetime.datetime(2018,9,4),
+            end = datetime.datetime(2018,9,11));
 
     with get_session() as s:
         print(wk.scorecard().with_session(s).all())
