@@ -264,13 +264,19 @@ def initialize_weeks():
 
 
 def score(wk):
+    combo = "{}{}".format(wk.species.short, wk.background.short)
     titlestr = "CSDC Week {} {}{}".format(wk.number, wk.species.short,
             wk.background.short)
     sp = ""
     sp += """<html>
     <head><title>{0}</title>
     <link rel="stylesheet" href="static/score.css"></head>
-    <body>\n<h1>{0}</h1>\n""".format(titlestr)
+    <body>
+    <div id="title">
+    <img id="logo" src="static/logo.png">
+    <h1 id="sdc">sudden death challenges</h1>
+    <h2>Week {1}&mdash;{2}</h2>
+    </div><div id="content">""".format(titlestr, wk.number, combo)
     sp += ('<div id="combo"><span class="label">Character: </span>' +
             '{0} {1}</div>\n'.format(wk.species.name, wk.background.name))
     sp += ('<div id="bonus"><span class="label">Tier I Bonus: </span>'
@@ -317,6 +323,6 @@ def score(wk):
             sp += ('</tr>\n')
 
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M %Z")
-    sp += ('</table><div id="updatetime"><span class="label">Updated: </span>{}</div></body></html>'.format(now))
+    sp += ('</table></div><div id="updatetime"><span class="label">Updated: </span>{}</div></body></html>'.format(now))
 
     return sp
