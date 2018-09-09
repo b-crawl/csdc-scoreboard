@@ -97,12 +97,19 @@ tr.dead:nth-child(even) {
 tr.alive {background-color: #383338}
 tr.alive:nth-child(even) {background-color: #1F1A1F;}
 
+tr.none {
+	color: #477;
+	background-color: #111;
+}
+
+tr.none:nth-child(even) {background-color: #000;}
+
 #updatetime {
     position: fixed;
     right: 0;
     bottom: 0;
     width: 100%;
     padding-right: 10px;
-    background-color: #303;
+    background-color: #605;
     text-align: right;
 }
