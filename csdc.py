@@ -261,13 +261,6 @@ def initialize_weeks():
                 end = datetime.datetime(2018,9,11),
                 bonus1 = lairbonus,
                 bonus2 = alllairbonus))
-        weeks.append(CsdcWeek(
-            number = "mibe",
-            species = "Mi",
-            background = "Be",
-            gods = ("Trog",),
-            start = datetime.datetime(2018,8,10),
-            end = datetime.datetime(2018,8,15)))
 
 
 def score(wk):
