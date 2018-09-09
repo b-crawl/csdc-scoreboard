@@ -5,6 +5,7 @@ import refresh
 import model
 import orm
 import csdc
+import time
 
 SOURCES_DIR = './sources'
 CONFIG_FILE = 'config.yml'
@@ -24,9 +25,12 @@ if __name__=='__main__':
     model.setup_database()
     refresh.refresh(CONFIG['sources file'], SOURCES_DIR)
     
+    t_i = time.time()
     csdc.initialize_weeks()
     for wk in csdc.weeks:
         scorepage = os.path.join(CONFIG['www dir'],"{}.html".format(wk.number))
 
         with open(scorepage, 'w') as f:
             f.write(csdc.score(wk))
+    logging.info("Rebuilt score pages in {} seconds.".format(time.time() -
+        t_i))
