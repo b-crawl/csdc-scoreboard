@@ -4,7 +4,6 @@ import sources
 import os
 import logging
 import time
-import json
 import modelutils
 from typing import Optional
 from model import (
