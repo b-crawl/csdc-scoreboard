@@ -3,11 +3,10 @@ html, body {
 }
 h1 {
     width: 100%;
-    padding-left: 10px;
     background-color: #ccc;
     text-align: center;
 }
-#combo, #bonus {
+#combo, #bonus, #gods {
     margin-left: 10px;
 }
 .label {
@@ -40,9 +39,10 @@ tr.dead:nth-child(even) {
 tr.alive:nth-child(even) {background-color: #eee;}
 #updatetime {
     position: fixed;
-    left: 0;
+    right: 0;
     bottom: 0;
     width: 100%;
-    padding-left: 10px;
+    padding-right: 10px;
     background-color: #ccc;
+    text-align: right;
 }
