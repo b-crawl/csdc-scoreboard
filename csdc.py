@@ -5,6 +5,7 @@ from model import (
     get_species,
     get_background,
     get_branch,
+    get_place_from_string,
     get_god,
     get_ktyp,
     get_verb
@@ -35,10 +36,10 @@ from sqlalchemy.orm.query import (
     Query
 )
 
-CsdcBonus = namedtuple("CsdcBonus", ["name", "description", "query"])
+CsdcBonus = namedtuple("CsdcBonus", ["name", "description", "query", "pts"])
 # The query here must be a scalar query, see no bonus for the example.
 
-NoBonus = CsdcBonus("NoBonus","No bonus",Query(literal(0)).as_scalar())
+NoBonus = CsdcBonus("NoBonus","No bonus",[literal(False)], "0")
 
 def _champion_god(milestones, god):
     """Query if the supplied god get championed in the provided milestone set"""
@@ -176,6 +177,12 @@ class CsdcWeek:
 
         return Query(type_coerce(Game.ktyp_id == ktyp_id, Integer))
 
+    def _bonus(self, bonus):
+        """in principle we support more than two bonuses"""
+        return type_coerce(self._valid_milestone().filter(
+                *bonus.query
+            ).exists(), Integer).__mul__(bonus.pts)
+
     def scorecard(self):
         sc = Query([Game.gid,
             Game.player_id,
@@ -186,8 +193,8 @@ class CsdcWeek:
             type_coerce(self._rune(1), Integer).label("rune"),
             type_coerce(self._rune(3), Integer).label("threerune"),
             self._win().label("win"),
-            self.tier1.query.label("bonusone"),
-            self.tier2.query.__mul__(2).label("bonustwo"),
+            self._bonus(self.tier1).label("bonusone"),
+            self._bonus(self.tier2).label("bonustwo"),
         ]).filter(Game.gid.in_(self.gids)).subquery()
 
         return Query(Game).select_from(sc).join(Game,
@@ -213,14 +220,39 @@ class CsdcWeek:
                     ).label("total")
                 ).group_by(sc.c.player_id).order_by(desc("total"))
 
-if __name__=='__main__':
-    wk = CsdcWeek(
-            number = 1,
-            species = "DE",
-            background = "En",
-            gods = ("Sif Muna", "Xom", "GOD_NO_GOD"),
-            start = datetime.datetime(2018,9,4),
-            end = datetime.datetime(2018,9,11));
-
+def score():
     with get_session() as s:
+        m2 = aliased(Milestone)
+        lairbonus = CsdcBonus("RuneInBranch",
+            "Get a rune without leaving any branch (other than D).",
+            [ Milestone.runes > 0,
+                Milestone.id.in_(Query(m2.id).filter(
+                    Milestone.gid == m2.gid,
+                    m2.verb_id == get_verb(s, "br.exit").id,
+                    ~m2.place_id.in_(Query(Place.id).join(Branch).filter(
+                        Branch.id != get_branch(s, "D").id))
+                    ).order_by(m2.time).limit(1)) ],
+            1)
+        lair1 = get_place_from_string(s, "Lair:1")
+        alllairbonus = CsdcBonus("LairRunesInLair",
+            "Enter Lair with no runes and leave with at least three.",
+            [ Milestone.runes >= 3,
+                Milestone.verb_id == get_verb(s, "br.exit").id,
+                Milestone.oplace_id == lair1.id,
+                Query(m2).filter(
+                    m2.gid == Milestone.gid,
+                    m2.verb_id == get_verb(s, "br.enter").id,
+                    m2.place_id == lair1.id,
+                    m2.runes == 0).exists() ],
+            "2")
+
+        wk = CsdcWeek(
+                number = 1,
+                species = "DE",
+                background = "En",
+                gods = ("Sif Muna", "Xom", "GOD_NO_GOD"),
+                start = datetime.datetime(2018,9,4),
+                end = datetime.datetime(2018,9,11),
+                bonus1 = lairbonus);
+
         print(wk.scorecard().with_session(s).all())
