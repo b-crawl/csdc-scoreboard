@@ -5,6 +5,7 @@ import refresh
 import model
 import orm
 import csdc
+import web
 import time
 
 SOURCES_DIR = './sources'
@@ -32,7 +33,7 @@ if __name__=='__main__':
         scorepage = os.path.join(CONFIG['www dir'],"{}.html".format(wk.number))
 
         with open(scorepage, 'w') as f:
-            f.write(csdc.score(wk))
+            f.write(web.scorepage(wk))
     logging.info("Rebuilt score pages in {} seconds.".format(time.time() -
         t_i))
     os.umask(oldmask)
