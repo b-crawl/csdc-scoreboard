@@ -10,6 +10,7 @@ from model import (
     get_ktyp,
     get_verb
 )
+from modelutils import morgue_url
 from orm import (
     Logfile,
     Server,
@@ -220,7 +221,9 @@ class CsdcWeek:
                     ).label("total")
                 ).group_by(sc.c.player_id).order_by(desc("total"))
 
-def score():
+weeks = []
+
+def initialize_weeks():
     with get_session() as s:
         m2 = aliased(Milestone)
         lairbonus = CsdcBonus("RuneInBranch",
@@ -246,13 +249,64 @@ def score():
                     m2.runes == 0).exists() ],
             "2")
 
-        wk = CsdcWeek(
-                number = 1,
+        weeks.append(CsdcWeek(
+                number = "beta",
                 species = "DE",
                 background = "En",
                 gods = ("Sif Muna", "Xom", "GOD_NO_GOD"),
                 start = datetime.datetime(2018,9,4),
                 end = datetime.datetime(2018,9,11),
-                bonus1 = lairbonus);
+                bonus1 = lairbonus))
 
-        print(wk.scorecard().with_session(s).all())
+def score(wk):
+    titlestr = "CSDC Week {} {}{}".format(wk.number, wk.species.short,
+            wk.background.short)
+    sp = ""
+    sp += "<html>\n<head><title>{0}</title></head>\n<body>\n<h1>{0}</h1>\n".format(titlestr)
+    sp += ('<div id="combo"><span class="label">Character: </span>' +
+            '{0} {1}</div>'.format(wk.species.name, wk.background.name))
+    sp += ('<div id="bonus"><span class="label">Tier I Bonus: </span>'
+            + wk.tier1.description + '<br/>'
+            + '<span class="label">Tier II Bonus: </span>'
+            + wk.tier2.description +'</div')
+    sp += ("""<table><tr class="head">
+    <th>Player</th>
+    <th>Unique Kill</th>
+    <th>Branch Enter</th>
+    <th>Branch End</th>
+    <th>Champion God</th>
+    <th>Collect 1 Rune</th>
+    <th>Collect 3 Runes</th>
+    <th>Win</th>
+    <th>Bonus I</th>
+    <th>Bonus II</th>
+    <th>Total</th>
+    </tr>""")
+
+    with get_session() as s:
+        for g in wk.scorecard().with_session(s).all():
+            sp += ('<tr>')
+            #print('<tr class="{}">'.format(
+            #    "won" if g.Game.won() else
+            #    alive if g.Game.alive() else
+            #    "dead"))
+            sp += ('<td class="name"><a href="{}">{}</a></td>'.format(
+                morgue_url(g.Game), g.Game.player.name))
+            sp += ( (('<td class="pt">{}</td>' * 9) 
+                + '<td class="total">{}</td>').format(
+                g.uniq,
+                g.brenter,
+                g.brend,
+                g.god,
+                g.rune,
+                g.threerune,
+                g.win,
+                g.bonusone,
+                g.bonustwo,
+                g.total))
+            sp += ('</tr>')
+
+    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M %Z")
+    sp += ('</table><div id="updatetime">{}</div></body></html>'.format(now))
+
+    return sp

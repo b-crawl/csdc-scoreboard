@@ -23,3 +23,6 @@ if __name__=='__main__':
     orm.initialize(CONFIG['db uri'])
     model.setup_database()
     refresh.refresh(CONFIG['sources file'], SOURCES_DIR)
+    
+    csdc.initialize_weeks()
+    print(csdc.score(csdc.weeks[0]))
