@@ -257,7 +257,8 @@ def initialize_weeks():
                 gods = ("Sif Muna", "Xom", "GOD_NO_GOD"),
                 start = datetime.datetime(2018,9,4),
                 end = datetime.datetime(2018,9,11),
-                bonus1 = lairbonus))
+                bonus1 = lairbonus,
+                bonus2 = alllairbonus))
 
 def score(wk):
     titlestr = "CSDC Week {} {}{}".format(wk.number, wk.species.short,
