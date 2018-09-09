@@ -310,17 +310,17 @@ class Game(Base):
     @property
     def won(self) -> bool:
         """Was this game won."""
-        return self.ktyp and self.ktyp.name == "winning"
+        return self.ktyp != None and self.ktyp.name == "winning"
 
     @property
     def quit(self) -> bool:
         """Was this game quit."""
-        return self.ktyp and self.ktyp.name == "quitting"
+        return self.ktyp != None and self.ktyp.name == "quitting"
 
     @property
     def boring(self) -> bool:
         """Was this game was quit, left, or wizmoded."""
-        return self.ktyp and self.ktyp.name in ("quitting", "leaving", "wizmode")
+        return self.ktyp != None and self.ktyp.name in ("quitting", "leaving", "wizmode")
 
     @property
     def char(self) -> str:

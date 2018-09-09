@@ -91,7 +91,7 @@ def morgue_url(game: orm.Game) -> Optional[str]:
     """Generates a morgue URL from a game."""
     src = game.account.server.name
     prefix = _morgue_prefix(src, game.version.v)
-    if not prefix:
+    if not prefix or game.alive:
         return None
 
     name = game.account.name
