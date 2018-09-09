@@ -267,7 +267,10 @@ def score(wk):
     titlestr = "CSDC Week {} {}{}".format(wk.number, wk.species.short,
             wk.background.short)
     sp = ""
-    sp += "<html>\n<head><title>{0}</title></head>\n<body>\n<h1>{0}</h1>\n".format(titlestr)
+    sp += """<html>
+    <head><title>{0}</title>
+    <link rel="stylesheet" href="static/score.css"></head>
+    <body>\n<h1>{0}</h1>\n""".format(titlestr)
     sp += ('<div id="combo"><span class="label">Character: </span>' +
             '{0} {1}</div>\n'.format(wk.species.name, wk.background.name))
     sp += ('<div id="bonus"><span class="label">Tier I Bonus: </span>'
@@ -277,7 +280,7 @@ def score(wk):
     sp += ('<div id="gods"><span class="label">Gods: </span>')
     sp += ", ".join([ g.name for g in wk.gods])
     sp += '</div>'
-    sp += ("""<table style="width:100%"><tr class="head">
+    sp += ("""<table><tr class="head">
     <th>Player</th>
     <th>Unique Kill</th>
     <th>Branch Enter</th>
