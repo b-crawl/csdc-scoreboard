@@ -176,7 +176,7 @@ class CsdcWeek:
         with get_session() as s:
             ktyp_id = get_ktyp(s, "winning").id
 
-        return Query(type_coerce(Game.ktyp_id == ktyp_id, Integer))
+        return type_coerce(and_(Game.ktyp_id != None, Game.ktyp_id == ktyp_id), Integer)
 
     def _bonus(self, bonus):
         """in principle we support more than two bonuses"""
@@ -216,10 +216,11 @@ class CsdcWeek:
                         + sc.c.god
                         + sc.c.rune
                         + sc.c.threerune
+                        + sc.c.win
                         + sc.c.bonusone
                         + sc.c.bonustwo
                     ).label("total")
-                ).group_by(sc.c.player_id).order_by(desc("total"))
+                ).group_by(sc.c.player_id).order_by(desc("total"),Game.start)
 
 weeks = []
 
@@ -268,8 +269,8 @@ def score(wk):
     sp += ('<div id="bonus"><span class="label">Tier I Bonus: </span>'
             + wk.tier1.description + '<br/>'
             + '<span class="label">Tier II Bonus: </span>'
-            + wk.tier2.description +'</div')
-    sp += ("""<table><tr class="head">
+            + wk.tier2.description +'</div>')
+    sp += ("""<table style="width:100%"><tr class="head">
     <th>Player</th>
     <th>Unique Kill</th>
     <th>Branch Enter</th>
@@ -285,11 +286,10 @@ def score(wk):
 
     with get_session() as s:
         for g in wk.scorecard().with_session(s).all():
-            sp += ('<tr>')
-            #print('<tr class="{}">'.format(
-            #    "won" if g.Game.won() else
-            #    alive if g.Game.alive() else
-            #    "dead"))
+            sp += ('<tr class="{}">'.format(
+                "won" if g.Game.won else
+                "alive" if g.Game.alive else
+                "dead"))
             sp += ('<td class="name"><a href="{}">{}</a></td>'.format(
                 morgue_url(g.Game), g.Game.player.name))
             sp += ( (('<td class="pt">{}</td>' * 9) 
@@ -304,9 +304,9 @@ def score(wk):
                 g.bonusone,
                 g.bonustwo,
                 g.total))
-            sp += ('</tr>')
+            sp += ('</tr>\n')
 
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M %Z")
-    sp += ('</table><div id="updatetime">{}</div></body></html>'.format(now))
+    sp += ('</table><div id="updatetime"><span class="label">Updated: </span>{}</div></body></html>'.format(now))
 
     return sp
