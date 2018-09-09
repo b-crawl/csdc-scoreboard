@@ -27,6 +27,7 @@ from orm import (
     Ktyp,
     Verb,
     Skill,
+    CsdcContestant,
     get_session,
 )
 
@@ -200,7 +201,9 @@ class CsdcWeek:
             self._bonus(self.tier2).label("bonustwo"),
         ]).filter(Game.gid.in_(self.gids)).subquery()
 
-        return Query(Game).select_from(sc).join(Game,
+        return Query( [Player, Game]).select_from(CsdcContestant).join(Player
+                ).outerjoin(sc, CsdcContestant.player_id ==
+                        sc.c.player_id).outerjoin(Game,
                 Game.gid == sc.c.gid).add_columns(
                     sc.c.uniq,
                     sc.c.brenter,
@@ -222,7 +225,7 @@ class CsdcWeek:
                         + sc.c.bonusone
                         + sc.c.bonustwo
                     ).label("total")
-                ).group_by(sc.c.player_id).order_by(desc("total"),Game.start)
+            ).group_by(CsdcContestant.player_id).order_by(desc("total"),Game.start)
 
 weeks = []
 
@@ -253,6 +256,14 @@ def initialize_weeks():
             "2")
 
         weeks.append(CsdcWeek(
+                number = "beta0",
+                species = "DD",
+                background = "Fi",
+                gods = ("Makhleb", "Trog", "Okawaru"),
+                start = datetime.datetime(2018,8,25),
+                end = datetime.datetime(2018,9,4)))
+
+        weeks.append(CsdcWeek(
                 number = "beta",
                 species = "DE",
                 background = "En",
@@ -261,5 +272,6 @@ def initialize_weeks():
                 end = datetime.datetime(2018,9,11),
                 bonus1 = lairbonus,
                 bonus2 = alllairbonus))
+
 
 divisions = [1]

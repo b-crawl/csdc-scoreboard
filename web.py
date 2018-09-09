@@ -53,6 +53,13 @@ def scoretable(wk, div):
 
     with get_session() as s:
         for g in wk.scorecard().with_session(s).all():
+            print("player:{}".format(g.Player.name))
+            if g.Game == None:
+                sp += """<tr class="{}"><td class="name">{}</td>
+                <td colspan="9"></td><td class="total">0</td></tr>""".format(
+                        "none", g.Player.name)
+                continue
+
             sp += ('<tr class="{}">'.format(
                 "won" if g.Game.won else
                 "alive" if g.Game.alive else

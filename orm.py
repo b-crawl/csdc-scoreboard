@@ -445,10 +445,10 @@ class CsdcContestant(Base):
     """CSDC Contestant"""
 
     __tablename__ = 'contestants'
-    player_id = Column(Integer, ForeignKey("players.id"), Nullable=False,
-            unique=True)
+    player_id = Column(Integer, ForeignKey("players.id"), nullable=False,
+            unique=True, primary_key=True)
     player = relationship("Player")
-    division = Column(Integer, Nullable=False)
+    division = Column(Integer, nullable=False)
 
 # End Object defs
 

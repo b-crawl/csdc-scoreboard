@@ -488,6 +488,10 @@ def list_players(s: sqlalchemy.orm.session.Session) -> Sequence[Player]:
     q = s.query(Player)
     return q.all()
 
+@_reraise_dberror
+def add_contestant(s: sqlalchemy.orm.session.Session, name: str) -> None:
+    """Add a Csdc Contestant"""
+    s.add(CsdcContestant(player_id = get_player_id(name),division = 1))
 
 def _generic_char_type_lister(
     s: sqlalchemy.orm.session.Session,
