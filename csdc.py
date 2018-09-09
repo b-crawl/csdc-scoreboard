@@ -266,11 +266,14 @@ def score(wk):
     sp = ""
     sp += "<html>\n<head><title>{0}</title></head>\n<body>\n<h1>{0}</h1>\n".format(titlestr)
     sp += ('<div id="combo"><span class="label">Character: </span>' +
-            '{0} {1}</div>'.format(wk.species.name, wk.background.name))
+            '{0} {1}</div>\n'.format(wk.species.name, wk.background.name))
     sp += ('<div id="bonus"><span class="label">Tier I Bonus: </span>'
-            + wk.tier1.description + '<br/>'
+            + wk.tier1.description + '<br/>\n'
             + '<span class="label">Tier II Bonus: </span>'
-            + wk.tier2.description +'</div>')
+            + wk.tier2.description +'</div>\n')
+    sp += ('<div id="gods"><span class="label">Gods: </span>')
+    sp += ", ".join([ g.name for g in wk.gods])
+    sp += '</div>'
     sp += ("""<table style="width:100%"><tr class="head">
     <th>Player</th>
     <th>Unique Kill</th>
