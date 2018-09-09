@@ -43,7 +43,7 @@ def scoretable(wk, div):
     <th>Branch Enter</th>
     <th>Branch End</th>
     <th>Champion God</th>
-    <th>Collect 1 Rune</th>
+    <th>Collect a Rune</th>
     <th>Collect 3 Runes</th>
     <th>Win</th>
     <th>Bonus I</th>
