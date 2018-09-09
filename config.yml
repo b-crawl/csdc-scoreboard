@@ -1,2 +1,3 @@
 logging level: DEBUG
 sources file: sources_csdc.yml
+db uri: sqlite:///crawl.db

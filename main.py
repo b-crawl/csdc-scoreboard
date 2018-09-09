@@ -3,6 +3,8 @@ import logging
 import yaml
 import refresh
 import model
+import orm
+import csdc
 
 SOURCES_DIR = './sources'
 CONFIG_FILE = 'config.yml'
@@ -18,5 +20,6 @@ if 'logging level' in CONFIG and hasattr(logging, CONFIG['logging level']):
 logging.basicConfig(level=logging_level)
 
 if __name__=='__main__':
+    orm.initialize(CONFIG['db uri'])
     model.setup_database()
     refresh.refresh(CONFIG['sources file'], SOURCES_DIR)

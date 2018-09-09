@@ -23,8 +23,6 @@ from contextlib import contextmanager
 import enum
 import json
 
-SQLALCHEMY_DATABASE_URI = "sqlite:///crawl.db"
-
 Base = declarative_base()
 
 @characteristic.with_repr(["name"])  # pylint: disable=too-few-public-methods
@@ -439,13 +437,17 @@ class Logfile(Base):
 
 # End Object defs
 
-engine = create_engine(SQLALCHEMY_DATABASE_URI)
+session_factory = None
 
-session_factory = sessionmaker(bind=engine, expire_on_commit=False, autocommit=False)
-Base.metadata.create_all(engine)
+def initialize(uri):
+    engine = create_engine(uri)
+    global session_factory 
+    session_factory = sessionmaker(bind=engine, expire_on_commit=False, autocommit=False)
+    Base.metadata.create_all(engine)
 
 @contextmanager
 def get_session():
+    global session_factory
     Session = scoped_session(session_factory)
     yield Session()
     Session.remove()
