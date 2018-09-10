@@ -3,9 +3,13 @@ from orm import get_session
 from modelutils import morgue_url
 import csdc
 
+TIMEFMT = "%H:%M %Z"
+DATEFMT = "%Y-%m-%d"
+DATETIMEFMT = DATEFMT + " " + TIMEFMT
+
 def updated():
-    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M %Z")
-    return '<div id="updatetime"><span class="label">Updated: </span>{}</div>'.format(now)
+    now = datetime.datetime.now(datetime.timezone.utc).strftime(DATETIMEFMT)
+    return '<span id="updated"><span class="label">Updated: </span>{}</span></div>'.format(now)
 
 
 def head(static, title):
@@ -25,6 +29,8 @@ def logoblock(subhead):
 
 def wkinfo(wk):
     sp = ""
+    sp += '<div id="times"><span class="label">Week of '
+    sp += wk.start.strftime(DATEFMT) + '</span></div>'
     sp += ('<div id="combo"><span class="label">Character: </span>' +
             '{0} {1}</div>\n'.format(wk.species.name, wk.background.name))
     sp += ('<div id="bonus"><span class="label">Tier I Bonus: </span>'
@@ -141,8 +147,9 @@ def overviewpage():
 
 def page(**kwargs):
     """static, title, subhead, content"""
-    return '<html>{}<body>{}<div id="content">{}</div>{}</body></html>'.format(
-            head(kwargs["static"],kwargs.get("title",kwargs.get("subhead",None))),
-            logoblock(kwargs.get("subhead",None)),
+    return """<html>{}<body>{}<div id="content">{}</div>
+    <div id="bottomtext">{}</div></body></html>""".format(
+            head(kwargs["static"],kwargs.get("title",kwargs.get("subhead",""))),
+            logoblock(kwargs.get("subhead","")),
             kwargs["content"],
-            updated() if not kwargs["static"] else None)
+            updated() if not kwargs["static"] else "")
