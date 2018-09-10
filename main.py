@@ -7,6 +7,7 @@ import orm
 import csdc
 import web
 import time
+import datetime
 
 SOURCES_DIR = './sources'
 CONFIG_FILE = 'config.yml'
@@ -25,11 +26,13 @@ if __name__=='__main__':
     orm.initialize(CONFIG['db uri'])
     model.setup_database()
     refresh.refresh(CONFIG['sources file'], SOURCES_DIR)
-    
-    t_i = time.time()
     csdc.initialize_weeks()
+    t_i = time.time()
+    now = datetime.datetime.now()
     oldmask = os.umask(18)
     for wk in csdc.weeks:
+        if wk.start > now:
+            continue
         scorepage = os.path.join(CONFIG['www dir'],"{}.html".format(wk.number))
 
         with open(scorepage, 'w') as f:

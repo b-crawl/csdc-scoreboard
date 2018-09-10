@@ -38,10 +38,20 @@ def wkinfo(wk):
     return sp
 
 
-def description(wk):
-    return "Week {}&mdash;{}{}".format(
-            wk.number, wk.species.short,
-            wk.background.short)
+def description(wk, url):
+    s = ""
+
+    if wk.start > datetime.datetime.now():
+        s += "Week {0}"
+    else:
+        s += "Week {0}&mdash;{1}{2}"
+
+    if url:
+        s = '<a href="{0}.html">' + s + '</a>'
+
+    return s.format(wk.number, wk.species.short,
+                wk.background.short)
+
 
 
 def scoretable(wk, div):
@@ -93,18 +103,23 @@ def scoretable(wk, div):
     return sp
 
 
+def _ifnone(x, d):
+    """this should be a language builtin like it is in sql"""
+    return x if x is not None else d
+
+
 def overviewtable():
     with get_session() as s:
         sp = "<table>"
         sp += '<tr class="head"><th>Player</th>'
-        sp += ''.join(['<th>' + description(wk) +'</th>' for wk in csdc.weeks
+        sp += ''.join(['<th>' + description(wk, True) +'</th>' for wk in csdc.weeks
             ])
         sp += '<th>Score</th></tr>'
         for p in csdc.overview().with_session(s).all():
             sp += '<tr>'
             sp += '<td class="name">{}</td>'.format(p.CsdcContestant.player.name)
             sp += ('<td class="pt">{}</td>' * len(csdc.weeks)).format(
-                    *[ getattr(p, "wk" + wk.number) for wk in csdc.weeks])
+                    *[ _ifnone(getattr(p, "wk" + wk.number), "") for wk in csdc.weeks])
             sp += '<td class="total">{}</td>'.format(p.grandtotal)
             sp += '</tr>'
 
@@ -112,7 +127,7 @@ def overviewtable():
 
 
 def scorepage(wk):
-    return page( static=False, subhead = description(wk),
+    return page( static=False, subhead = description(wk, False),
             content = wkinfo(wk) + 
             " ".join([ scoretable(wk, d) for d in csdc.divisions]))
 

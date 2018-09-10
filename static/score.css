@@ -41,7 +41,7 @@ html, body {
 a {
     color: #ccc;
 }
-#combo, #bonus, #gods {
+#combo, #bonus, #gods, #times  {
     margin-left: 10px;
     font-size: 14pt;
 }
