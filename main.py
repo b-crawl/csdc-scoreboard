@@ -36,4 +36,8 @@ if __name__=='__main__':
             f.write(web.scorepage(wk))
     logging.info("Rebuilt score pages in {} seconds.".format(time.time() -
         t_i))
+
+    overview = os.path.join(CONFIG['www dir'],"overview.html")
+    with open(overview, 'w') as f:
+        f.write(web.overviewpage())
     os.umask(oldmask)
