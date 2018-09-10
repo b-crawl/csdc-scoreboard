@@ -7,11 +7,13 @@ def updated():
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M %Z")
     return '<div id="updatetime"><span class="label">Updated: </span>{}</div>'.format(now)
 
+
 def head(static, title):
     refresh = '<meta http-equiv="refresh" content="300">' if not static else ""
     return """<head><title>{0}</title>
     <link rel="stylesheet" href="static/score.css">
     {1}</head>""".format(title, refresh)
+
 
 def logoblock(subhead):
     sh = "<h2>{}</h2>".format(subhead) if subhead != None else ""
@@ -19,6 +21,7 @@ def logoblock(subhead):
     <img id="logo" src="static/logo.png">
     <h1 id="sdc">sudden death challenges</h1>
     {}</div>""".format(sh)
+
 
 def wkinfo(wk):
     sp = ""
@@ -33,6 +36,12 @@ def wkinfo(wk):
     sp += '</div>'
 
     return sp
+
+
+def description(wk):
+    return "Week {}&mdash;{}{}".format(
+            wk.number, wk.species.short,
+            wk.background.short)
 
 
 def scoretable(wk, div):
@@ -53,7 +62,6 @@ def scoretable(wk, div):
 
     with get_session() as s:
         for g in wk.scorecard().with_session(s).all():
-            print("player:{}".format(g.Player.name))
             if g.Game == None:
                 sp += """<tr class="{}"><td class="name">{}</td>
                 <td colspan="9"></td><td class="total">0</td></tr>""".format(
@@ -61,7 +69,7 @@ def scoretable(wk, div):
                 continue
 
             sp += ('<tr class="{}">'.format(
-                "won" if g.Game.won else
+                "won" if g.Game.won and g.Game.end <= wk.end else
                 "alive" if g.Game.alive else
                 "dead"))
             sp += ('<td class="name"><a href="{}">{}</a></td>'.format(
@@ -85,19 +93,41 @@ def scoretable(wk, div):
     return sp
 
 
+def overviewtable():
+    with get_session() as s:
+        sp = "<table>"
+        sp += '<tr class="head"><th>Player</th>'
+        sp += ''.join(['<th>' + description(wk) +'</th>' for wk in csdc.weeks
+            ])
+        sp += '<th>Score</th></tr>'
+        for p in csdc.overview().with_session(s).all():
+            print("player:{}".format(p.CsdcContestant.player.name))
+            sp += '<tr>'
+            sp += '<td class="name">{}</td>'.format(p.CsdcContestant.player.name)
+            sp += '<td colspan="{}"></td>'.format(len(csdc.weeks))
+            sp += '<td class="total">{}</td>'.format(p.grandtotal)
+            sp += '</tr>'
+
+        return sp
+
+
 def scorepage(wk):
-    combo = "{}{}".format(wk.species.short, wk.background.short)
-    titlestr = "Week {}&mdash;{}".format(wk.number, combo)
-    return page( static=False, title = "CSDC " + titlestr, subhead = titlestr,
+    return page( static=False, subhead = description(wk),
             content = wkinfo(wk) + 
             " ".join([ scoretable(wk, d) for d in csdc.divisions]))
+
+
+def overviewpage():
+    return page( static=False,
+            subhead = "Scoring Overview",
+            #for now. want to have the wk info up top or at least links
+            content = overviewtable())
 
 
 def page(**kwargs):
     """static, title, subhead, content"""
     return '<html>{}<body>{}<div id="content">{}</div>{}</body></html>'.format(
-            head(kwargs["static"],kwargs["title"]),
+            head(kwargs["static"],kwargs.get("title",kwargs.get("subhead",None))),
             logoblock(kwargs.get("subhead",None)),
             kwargs["content"],
             updated() if not kwargs["static"] else None)
-
