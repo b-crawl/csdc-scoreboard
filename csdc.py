@@ -274,4 +274,17 @@ def initialize_weeks():
                 bonus2 = alllairbonus))
 
 
+def overview():
+    q = Query(CsdcContestant)
+    totalcols = []
+    for wk in weeks:
+        a = wk.scorecard().subquery()
+        totalcols.append(func.ifnull(a.c.total, 0))
+        q = q.outerjoin(a, CsdcContestant.player_id == a.c.player_id
+                ).add_column( a.c.total.label("wk" + wk.number))
+
+    return q.add_column(
+            sum(totalcols).label("grandtotal")
+        ).order_by(desc("grandtotal"))
+
 divisions = [1]
