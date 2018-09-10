@@ -101,10 +101,10 @@ def overviewtable():
             ])
         sp += '<th>Score</th></tr>'
         for p in csdc.overview().with_session(s).all():
-            print("player:{}".format(p.CsdcContestant.player.name))
             sp += '<tr>'
             sp += '<td class="name">{}</td>'.format(p.CsdcContestant.player.name)
-            sp += '<td colspan="{}"></td>'.format(len(csdc.weeks))
+            sp += ('<td class="pt">{}</td>' * len(csdc.weeks)).format(
+                    *[ getattr(p, "wk" + wk.number) for wk in csdc.weeks])
             sp += '<td class="total">{}</td>'.format(p.grandtotal)
             sp += '</tr>'
 
