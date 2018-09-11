@@ -40,7 +40,7 @@ if __name__=='__main__':
     logging.info("Rebuilt score pages in {} seconds.".format(time.time() -
         t_i))
 
-    overview = os.path.join(CONFIG['www dir'],"overview.html")
+    overview = os.path.join(CONFIG['www dir'],"standings.html")
     with open(overview, 'w') as f:
-        f.write(web.overviewpage())
+        f.write(web.standingspage())
     os.umask(oldmask)

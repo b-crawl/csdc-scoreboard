@@ -26,6 +26,25 @@ def logoblock(subhead):
     <h1 id="sdc">sudden death challenges</h1>
     {}</div>""".format(sh)
 
+def mainmenu():
+    return ('<span class="menu"><a href="index.html">Overview</a></span>' +
+        '<span class="menu"><a href="rules.html">Rules</a></span>' + 
+        '<span class="menu"><a href="standings.html">Standings</a></span>' +
+        '<span class="menuspacer"></span>')
+
+def wkmenu(wk):
+    sp = ""
+    for w in csdc.weeks:
+        menuitem = ""
+        if (wk is None or 
+            w.number != wk.number
+            and w.start <= datetime.datetime.now()):
+            menuitem += wkurl(w)
+        else:
+            menuitem += '{}'
+        sp += '<span class="menu">{}</span>'.format(menuitem.format("Week " +
+            w.number))
+    return sp
 
 def wkinfo(wk):
     sp = ""
@@ -43,6 +62,9 @@ def wkinfo(wk):
 
     return sp
 
+def wkurl(wk):
+    return '<a href="'+ wk.number + '.html">{}</a>'
+
 
 def description(wk, url):
     s = ""
@@ -53,7 +75,7 @@ def description(wk, url):
         s += "Week {0}&mdash;{1}{2}"
 
     if url:
-        s = '<a href="{0}.html">' + s + '</a>'
+        s = wkurl(wk).format(s)
 
     return s.format(wk.number, wk.species.short,
                 wk.background.short)
@@ -114,7 +136,7 @@ def _ifnone(x, d):
     return x if x is not None else d
 
 
-def overviewtable():
+def standingstable():
     with get_session() as s:
         sp = "<table>"
         sp += '<tr class="head"><th>Player</th>'
@@ -135,14 +157,15 @@ def overviewtable():
 def scorepage(wk):
     return page( static=False, subhead = description(wk, False),
             content = wkinfo(wk) + 
-            " ".join([ scoretable(wk, d) for d in csdc.divisions]))
+            " ".join([ scoretable(wk, d) for d in csdc.divisions]),
+            menu = wkmenu(wk))
 
 
-def overviewpage():
+def standingspage():
     return page( static=False,
-            subhead = "Scoring Overview",
+            subhead = "Standings",
             #for now. want to have the wk info up top or at least links
-            content = overviewtable())
+            content = standingstable())
 
 
 def page(**kwargs):
@@ -152,4 +175,5 @@ def page(**kwargs):
             head(kwargs["static"],kwargs.get("title",kwargs.get("subhead",""))),
             logoblock(kwargs.get("subhead","")),
             kwargs["content"],
-            updated() if not kwargs["static"] else "")
+            mainmenu() + kwargs.get("menu", wkmenu(None)) + (updated() if not kwargs["static"] else
+                ""))
