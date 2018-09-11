@@ -36,13 +36,26 @@ html, body {
 
 #content {
     margin-bottom: 40px;
+    margin-left: 10px;
 }
 
 a {
     color: #ccc;
 }
+h2 {
+	text-align: center;
+}
+p,ul {
+	margin-left: calc(20% - 10px);
+	margin-right: auto;
+	width: 60%;
+}
+li {
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+}
 #combo, #bonus, #gods, #times  {
-    margin-left: 10px;
     font-size: 14pt;
 }
 
@@ -51,7 +64,9 @@ a {
 }
 
 table {
-    margin: 30px;
+    margin-left: 20px;
+    margin-right: 30px;
+    margin-top: 30px;
     width: calc(100% - 60px);
     border-collapse: collapse;
 }

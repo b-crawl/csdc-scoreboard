@@ -173,6 +173,56 @@ def standingspage():
             #for now. want to have the wk info up top or at least links
             content = standingstable())
 
+def overviewpage():
+    pagestr = """
+<p>The Crawl Sudden Death Challenges is a competition that aims to fill a
+Crawl niche not currently filled by the biannual version release tournaments.
+The idea is for players to compete by trying to do as well as possible in a
+game of Crawl with one attempt only; if you die, that challenge is over (thus
+"sudden death", though you may - will - also die suddenly). This competition is
+a lower time commitment event that aims to challenges players, while
+simultaneously encouraging unusual characters and play styles that you might
+not normally consider.</p>
+
+<p>Milestones from CSDC games will be announced in the IRC channel
+<code>##csdc</code> on <a href="http://freenode.net">freenode</a>. 
+It's a great place to hang out if you want to live spectate ongoing games or
+talk with other people about the competition.</p>
+
+<h2>Competition Format</h2>
+
+<ul>
+<li>Each challenge consists of playing a randomly chosen Crawl combo.</li>
+<li>You get <em>one</em>  attempt to play each combo.</li>
+<li>The goal is to advance as far as possible (and win!) in each game, scoring
+points by reaching various in-game milestones.</li>
+<li>Details on rules and scoring are available on the <a
+href="rules.html">rules page</a>.</li>
+</ul>
+
+<h2>Schedule</h2>
+
+{}
+
+<h2>Sign Up</h2>
+
+<p>In order to sign up, place <code># csdc</code> as the first line of your
+0.22 rcfile on <a href="https://crawl.develz.org/play.htm">any of the official
+online servers</a> before the start of the first week. Your name will appear in
+the standings once you've done this correctly.</p>
+
+<h2>Credits</h2>
+
+<p>Original CSDC rules and organization by <a
+href="http://crawl.akrasiac.org/scoring/players/walkerboh.html">WalkerBoh</a>.
+Postquell IRC support by <a
+href="http://crawl.akrasiac.org/scoring/players/kramin.html">Kramin</a>. Dungeon
+Crawl Stone Soup by the <a
+href="https://github.com/crawl/crawl/blob/master/crawl-ref/CREDITS.txt">Sonte
+Soup Team</a>. I am your host, <a
+href="http://crawl.akrasiac.org/scoring/players/ebering.html">ebering</a>.""".format("lel")
+    return page( static = True, content = pagestr)
+
 
 def page(**kwargs):
     """static, title, subhead, content"""
