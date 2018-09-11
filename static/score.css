@@ -104,6 +104,16 @@ tr.none {
 
 tr.none:nth-child(even) {background-color: #000;}
 
+.menu {
+	padding-left: 10px;
+}
+
+.menuspacer {
+	margin-left: 10px;
+	border-left: 3px solid #ccc;
+	height: calc(14pt);
+}
+
 #bottomtext {
     position: fixed;
     left: 0;
