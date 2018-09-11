@@ -104,12 +104,16 @@ tr.none {
 
 tr.none:nth-child(even) {background-color: #000;}
 
-#updatetime {
+#bottomtext {
     position: fixed;
-    right: 0;
+    left: 0;
     bottom: 0;
     width: 100%;
-    padding-right: 10px;
     background-color: #605;
-    text-align: right;
+    padding: 5px;
+}
+
+#updated {
+	float: right;
+	margin-right: 15px;
 }
