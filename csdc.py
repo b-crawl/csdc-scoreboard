@@ -264,7 +264,7 @@ def initialize_weeks():
                 end = datetime.datetime(2018,9,4)))
 
         weeks.append(CsdcWeek(
-                number = "beta",
+                number = "beta1",
                 species = "DE",
                 background = "En",
                 gods = ("Sif Muna", "Xom", "GOD_NO_GOD"),
