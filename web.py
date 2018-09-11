@@ -19,18 +19,22 @@ def head(static, title):
     {1}</head>""".format(title, refresh)
 
 
+version = '0.22'
+
 def logoblock(subhead):
     sh = "<h2>{}</h2>".format(subhead) if subhead != None else ""
     return """<div id="title">
     <img id="logo" src="static/logo.png">
-    <h1 id="sdc">sudden death challenges</h1>
-    {}</div>""".format(sh)
+    <h1 id="sdc">{} sudden death challenges</h1>
+    {}</div>""".format(version, sh)
+
 
 def mainmenu():
     return ('<span class="menu"><a href="index.html">Overview</a></span>' +
         '<span class="menu"><a href="rules.html">Rules</a></span>' + 
         '<span class="menu"><a href="standings.html">Standings</a></span>' +
         '<span class="menuspacer"></span>')
+
 
 def wkmenu(wk):
     sp = ""
@@ -45,6 +49,7 @@ def wkmenu(wk):
         sp += '<span class="menu">{}</span>'.format(menuitem.format("Week " +
             w.number))
     return sp
+
 
 def wkinfo(wk):
     sp = ""
@@ -61,6 +66,7 @@ def wkinfo(wk):
     sp += '</div>'
 
     return sp
+
 
 def wkurl(wk):
     return '<a href="'+ wk.number + '.html">{}</a>'
