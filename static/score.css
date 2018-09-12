@@ -45,17 +45,37 @@ a {
 h2 {
 	text-align: center;
 }
-p,ul {
+p,ul,ol,.info {
 	margin-left: calc(20% - 10px);
 	margin-right: auto;
 	width: 60%;
+	padding: 0;
 }
+
+pre {
+	background: #606;
+	border: 3px dashed #669;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
+}
+
+#rc {
+	width: 6em;
+	font-size: 12pt;
+	text-align: center;
+}
+
+#cover {
+	width: 45em;
+}
+
 li {
 	margin-left: auto;
 	margin-right: auto;
 	width: 80%;
 }
-#combo, #bonus, #gods, #times  {
+#combo, #bonus, #gods, #times, #schedule  {
     font-size: 14pt;
 }
 
@@ -87,6 +107,7 @@ th {
 tr.head {
 	font-size: 14pt;
 	border-bottom: 3px solid #669;
+	border-top: 3px solid #669;
 }
 
 tr {

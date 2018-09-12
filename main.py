@@ -47,4 +47,8 @@ if __name__=='__main__':
     index = os.path.join(CONFIG['www dir'],"index.html")
     with open(index, 'w') as f:
         f.write(web.overviewpage())
+
+    rules = os.path.join(CONFIG['www dir'],"rules.html")
+    with open(rules, 'w') as f:
+        f.write(web.rulespage())
     os.umask(oldmask)

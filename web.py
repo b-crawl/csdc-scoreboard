@@ -175,12 +175,17 @@ def standingspage():
 
 def overviewpage():
     pagestr = """
+    <img src="static/suddendeath.png">
+    <pre id="cover">
+_You are suddenly pulled into a different region of the Abyss!
+_A floating eye, a glowing orange brain, 4 small abominations and 8 large
+ abominations come into view.</pre>
 <p>The Crawl Sudden Death Challenges is a competition that aims to fill a
 Crawl niche not currently filled by the biannual version release tournaments.
 The idea is for players to compete by trying to do as well as possible in a
 game of Crawl with one attempt only; if you die, that challenge is over (thus
-"sudden death", though you may - will - also die suddenly). This competition is
-a lower time commitment event that aims to challenges players, while
+"sudden death", though you may&mdash;<em>will</em>&mdash;also die suddenly). This competition is
+a lower time commitment event that aims to challenge players while
 simultaneously encouraging unusual characters and play styles that you might
 not normally consider.</p>
 
@@ -206,10 +211,11 @@ href="rules.html">rules page</a>.</li>
 
 <h2>Sign Up</h2>
 
-<p>In order to sign up, place <code># csdc</code> as the first line of your
-0.22 rcfile on <a href="https://crawl.develz.org/play.htm">any of the official
-online servers</a> before the start of the first week. Your name will appear in
-the standings once you've done this correctly.</p>
+<p>In order to sign up, set the first line of your 0.22 rcfile to</p> <pre
+id="rc"># csdc</pre><p>on <a
+href="https://crawl.develz.org/play.htm">any of the official online servers</a>
+before the start of the first week. Your name will appear in the standings once
+you've done this correctly.</p>
 
 <h2>Credits</h2>
 
@@ -220,8 +226,93 @@ href="http://crawl.akrasiac.org/scoring/players/kramin.html">Kramin</a>. Dungeon
 Crawl Stone Soup by the <a
 href="https://github.com/crawl/crawl/blob/master/crawl-ref/CREDITS.txt">Sonte
 Soup Team</a>. I am your host, <a
-href="http://crawl.akrasiac.org/scoring/players/ebering.html">ebering</a>.""".format("lel")
-    return page( static = True, content = pagestr)
+href="http://crawl.akrasiac.org/scoring/players/ebering.html">ebering</a>."""
+
+    wklist = "<ul id=schedule>"
+    for wk in csdc.weeks:
+        wklist += '<li><span class=label>{}:</span> {} to {}'.format(description(wk,True),
+                wk.start.strftime(DATEFMT),
+                wk.end.strftime(DATEFMT))
+    wklist += "</ul>"
+
+    return page( static = True, content = pagestr.format(wklist))
+
+def rulespage():
+    pagestr ="""
+    <ol>
+<li>Each challenge consists of playing a randomly chosen Crawl race/class
+combo (e.g. MiBe). The combo for each week of the competition will be announced
+at 00:00 UTC on the Thursday starting that week. All players have one week to
+finish a game using that combo. Only milestones recorded during the week will
+count for scoring.</li>
+<li>Your first {} game started on an official server during the week will count
+for scoring. This is the only allowed attempt, subject to rule 3 below.</li>
+<li>One redo per week is allowed if player XL < 5 (i.e., no redo once you hit
+XL 5). The highest CSDC score of the two games is counted towards your score.</li>
+<li>Each challenge has an optional bonus challenge in addition to the
+race/class combo. Each bonus will have two tiers; the second tier is more
+difficult and worth more points.</li>
+<li>Each challenge includes a list of gods. A bonus point can be earned upon
+reaching ****** piety (or on worship with Gozag or Xom) with one of the listed
+gods (but only if it is the first god worshipped that game, and you don't
+abandon or get excommunicated later). If the combo for the week is a zealot
+background or demigod, no god points are available.</li>
+<li>The season consists of 7 challenges total (i.e., 7 different combos). Each
+race and background will be selected at most once during the competition.</li>
+<li>The final rankings will be tallied at the end of week 7 and represent the
+final outcome. The player with the highest CSDC score is the champion.</li>
+<li>Tiebreakers are (in order): number of weekly bonus points, highest in-game
+score.</li>
+</ol>
+
+<h2>Scoring</h2>
+
+<p>Scoring is divided into two parts, weekly points assigned to each game
+played, and one-time points awarded once per season regardless of how many
+games achieve them.</p>
+
+<table class="info"><tr class="head"><th>Weekly points (can be earned each
+week)</th><th></th></tr>
+<tr><td class="name">Kill a unique:</td><td class="pt">1</td></tr>
+<tr><td class="name">Enter a multi-level branch of the dungeon:</td><td class="pt">1</td></tr>
+<tr><td class="name">Reach the end of a multi-level branch (including D):</td><td class="pt">1</td></tr>
+<tr><td class="name">Champion a listed god:</td><td class="pt">1</td></tr>
+<tr><td class="name">Collect a rune:</td><td class="pt">1</td></tr>
+<tr><td class="name">Collect 3 or more runes:</td><td class="pt">1</td></tr>
+<tr><td class="name">Win:</td><td class="pt">1</td></tr>
+<tr><td class="name">Complete a Tier I bonus:</td><td class="pt">1</td></tr>
+<tr><td class="name">Complete a Tier II bonus:</td><td class="pt">2</td></tr>
+<tr class="head" id="onetime"><th>One-time points (earned once in the
+competition)</th><th></th></tr>
+<tr><td class="name">Win a game with 15 runes:</td><td class="pt">3</td></tr>
+<tr><td class="name">Win a game in under 50,000 turns:</td><td class="pt">3</td></tr>
+<tr><td class="name">Clear a Zigguraut:</td><td class="pt">3</td></tr>
+<tr><td class="name">Enter Zot at XL 20 or lower:</td><td class="pt">6</td></tr>
+<tr><td class="name">Win a game without entering lair:</td><td class="pt">6</td></tr>
+<tr><td class="name">Get a rune without using potions or scrolls:</td><td class="pt">6</td></tr>
+</table>
+
+<p class="notes"> It will not always be the case that earning a
+Tier II bonus implies that you have earned a Tier I bonus, these points can be
+awarded separately. Unless specified, a bonus or one time point does not
+require you to win to earn the point.</p>
+
+<h2>Fair Crawling</h2>
+
+<p>All contestants will compete with commonly recognized principles of
+sportsmanship and fair play. Failure to do so will result in disqualification
+without recourse and your entry will be deleted from the scoring database. If
+you are uncertain if something is "fair play" then ask for clarification before
+doing it. Ignorance and negligence are not excuses for poor behavior.</p>
+
+<p>All contestants acknowledge an obligation not to commit misconduct in
+relation to their participation.  Misconduct is any act that is a breach of
+good manners, a breach of good sportsmanship, or uethical behavior. Misconduct
+will also result in disqualification without recourse and your entry will be
+deleted from the scoring database. Sever misconduct will lead to exclusion from
+future CSDC events.</p>
+"""
+    return page(static=True, subhead="Rules", content = pagestr)
 
 
 def page(**kwargs):
