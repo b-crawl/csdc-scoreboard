@@ -230,7 +230,7 @@ href="http://crawl.akrasiac.org/scoring/players/walkerboh.html">WalkerBoh</a>.
 Postquell IRC support by <a
 href="http://crawl.akrasiac.org/scoring/players/kramin.html">Kramin</a>. Dungeon
 Crawl Stone Soup by the <a
-href="https://github.com/crawl/crawl/blob/master/crawl-ref/CREDITS.txt">Sonte
+href="https://github.com/crawl/crawl/blob/master/crawl-ref/CREDITS.txt">Stone
 Soup Team</a>. Thank you to all the players who made runs in the beta. I am your host, <a
 href="http://crawl.akrasiac.org/scoring/players/ebering.html">ebering</a>."""
 
