@@ -241,7 +241,7 @@ href="http://crawl.akrasiac.org/scoring/players/ebering.html">ebering</a>."""
                 wk.end.strftime(DATEFMT))
     wklist += "</ul>"
 
-    return page( static = True, content = pagestr.format(wklist))
+    return page( static = True, title="Crawl Sudden Death Challenges", content = pagestr.format(wklist))
 
 def rulespage():
     pagestr ="""
