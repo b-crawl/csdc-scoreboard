@@ -313,7 +313,7 @@ doing it. Ignorance and negligence are not excuses for poor behavior.</p>
 
 <p>All contestants acknowledge an obligation not to commit misconduct in
 relation to their participation.  Misconduct is any act that is a breach of
-good manners, a breach of good sportsmanship, or uethical behavior. Misconduct
+good manners, a breach of good sportsmanship, or unethical behavior. Misconduct
 will also result in disqualification without recourse and your entry will be
 deleted from the scoring database. Sever misconduct will lead to exclusion from
 future CSDC events.</p>
