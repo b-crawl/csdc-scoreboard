@@ -148,12 +148,15 @@ def standingstable():
         sp += '<tr class="head"><th>Player</th>'
         sp += ''.join(['<th>' + description(wk, True) +'</th>' for wk in csdc.weeks
             ])
+        sp +='<th>15 Rune Win</th><th>Win &lt;50k Turns</th><th>Zig:$</th>'
+        sp +='<th>Zot @ XL20</th><th>No Lair Win</th><th>Ascetic Rune</th>'
         sp += '<th>Score</th></tr>'
         for p in csdc.overview().with_session(s).all():
             sp += '<tr>'
             sp += '<td class="name">{}</td>'.format(p.CsdcContestant.player.name)
             sp += ('<td class="pt">{}</td>' * len(csdc.weeks)).format(
                     *[ _ifnone(getattr(p, "wk" + wk.number), "") for wk in csdc.weeks])
+            sp += '<td class="pt"></td>' * 6
             sp += '<td class="total">{}</td>'.format(p.grandtotal)
             sp += '</tr>'
 
