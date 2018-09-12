@@ -318,7 +318,7 @@ will also result in disqualification without recourse and your entry will be
 deleted from the scoring database. Severe misconduct will lead to exclusion from
 future CSDC events.</p>
 """
-    return page(static=True, subhead="Rules", content = pagestr)
+    return page(static=True, subhead="Rules", content = pagestr.format("0.22"))
 
 
 def page(**kwargs):
