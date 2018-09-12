@@ -256,22 +256,54 @@ def initialize_weeks():
             "2")
 
         weeks.append(CsdcWeek(
-                number = "beta0",
+                number = "1",
                 species = "DD",
                 background = "Fi",
                 gods = ("Makhleb", "Trog", "Okawaru"),
-                start = datetime.datetime(2018,8,25),
-                end = datetime.datetime(2018,9,4)))
-
+                start = datetime.datetime(2018,10,4),
+                end = datetime.datetime(2018,10,11)))
         weeks.append(CsdcWeek(
-                number = "beta1",
-                species = "DE",
-                background = "En",
-                gods = ("Sif Muna", "Xom", "GOD_NO_GOD"),
-                start = datetime.datetime(2018,9,4),
-                end = datetime.datetime(2018,9,11),
-                bonus1 = lairbonus,
-                bonus2 = alllairbonus))
+                number = "2",
+                species = "DD",
+                background = "Fi",
+                gods = ("Makhleb", "Trog", "Okawaru"),
+                start = datetime.datetime(2018,10,11),
+                end = datetime.datetime(2018,10,18)))
+        weeks.append(CsdcWeek(
+                number = "3",
+                species = "DD",
+                background = "Fi",
+                gods = ("Makhleb", "Trog", "Okawaru"),
+                start = datetime.datetime(2018,10,18),
+                end = datetime.datetime(2018,10,25)))
+        weeks.append(CsdcWeek(
+                number = "4",
+                species = "DD",
+                background = "Fi",
+                gods = ("Makhleb", "Trog", "Okawaru"),
+                start = datetime.datetime(2018,10,25),
+                end = datetime.datetime(2018,11,1)))
+        weeks.append(CsdcWeek(
+                number = "5",
+                species = "DD",
+                background = "Fi",
+                gods = ("Makhleb", "Trog", "Okawaru"),
+                start = datetime.datetime(2018,11,8),
+                end = datetime.datetime(2018,11,15)))
+        weeks.append(CsdcWeek(
+                number = "6",
+                species = "DD",
+                background = "Fi",
+                gods = ("Makhleb", "Trog", "Okawaru"),
+                start = datetime.datetime(2018,11,15),
+                end = datetime.datetime(2018,11,22)))
+        weeks.append(CsdcWeek(
+                number = "7",
+                species = "DD",
+                background = "Fi",
+                gods = ("Makhleb", "Trog", "Okawaru"),
+                start = datetime.datetime(2018,11,22),
+                end = datetime.datetime(2018,11,29)))
 
 
 def overview():

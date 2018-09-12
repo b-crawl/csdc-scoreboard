@@ -40,8 +40,8 @@ def wkmenu(wk):
     sp = ""
     for w in csdc.weeks:
         menuitem = ""
-        if (wk is None or 
-            w.number != wk.number
+        if ((wk is None or 
+            w.number != wk.number)
             and w.start <= datetime.datetime.now()):
             menuitem += wkurl(w)
         else:
@@ -80,7 +80,7 @@ def description(wk, url):
     else:
         s += "Week {0}&mdash;{1}{2}"
 
-    if url:
+    if url and wk.start <= datetime.datetime.now():
         s = wkurl(wk).format(s)
 
     return s.format(wk.number, wk.species.short,
@@ -173,12 +173,15 @@ def scorepage(wk):
 def standingspage():
     return page( static=False,
             subhead = "Standings",
-            #for now. want to have the wk info up top or at least links
             content = standingstable())
+
+def standingsplchold():
+    return page( static=True,
+            subhead = "Registrations are not yet being processed. Check back soon.",
+            content = "" )
 
 def overviewpage():
     pagestr = """
-    <img src="static/suddendeath.png">
     <pre id="cover">
 _You are suddenly pulled into a different region of the Abyss!
 _A floating eye, a glowing orange brain, 4 small abominations and 8 large
