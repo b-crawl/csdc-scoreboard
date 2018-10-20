@@ -8,7 +8,7 @@ Background = namedtuple("Background", ["short", "full"])
 God = namedtuple("God", ["name"])
 
 SPECIES = {
-    Species("Ba", "Barachian"),
+    Species("Ba", "Barachi"),
     Species("Ce", "Centaur"),
     Species("DD", "Deep Dwarf"),
     Species("DE", "Deep Elf"),
