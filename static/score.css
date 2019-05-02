@@ -10,7 +10,7 @@
  * Text grey 2: #69c*/
 html, body {
     margin: 0;
-    background-color: #202;
+    background-color: #030235;
     color: #ccc;
     font-family: sans-serif;
 }
@@ -29,7 +29,7 @@ html, body {
 }
 #title {
     width: 100%;
-    background-color: #202;
+    background-color: #030235;
     color: #eb2;
     text-align: center;
 }
@@ -53,7 +53,7 @@ p,ul,ol,.info {
 }
 
 pre {
-	background: #606;
+	background: #002E64;
 	border: 3px dashed #669;
 	margin-left: auto;
 	margin-right: auto;
@@ -111,10 +111,10 @@ tr.head {
 }
 
 tr {
-	background-color: #606;
+	background-color: #122D4B;
 }
 tr:nth-child(even) {
-	background-color: #303;
+	background-color: #1F1E30;
 }
 
 tr.won {
@@ -155,7 +155,7 @@ tr.none:nth-child(even) {background-color: #000;}
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: #606;
+    background-color: #002E64;
     padding: 5px;
 }
 

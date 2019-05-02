@@ -42,7 +42,7 @@ if __name__=='__main__':
 
     standings = os.path.join(CONFIG['www dir'],"standings.html")
     with open(standings, 'w') as f:
-        f.write(web.standingsplchold())
+        f.write(web.standingspage())
 
     index = os.path.join(CONFIG['www dir'],"index.html")
     with open(index, 'w') as f:

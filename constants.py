@@ -8,6 +8,12 @@ Background = namedtuple("Background", ["short", "full"])
 God = namedtuple("God", ["name"])
 
 SPECIES = {
+    Species("DW", "Dusk Walker"),
+    Species("Fr", "Fairy"),
+    Species("Av", "Avariel"),
+    Species("SD", "Sand Dwarf"),
+    Species("On", "Oni"),
+    Species("Dj", "Djinni"),
     Species("Ba", "Barachi"),
     Species("Ce", "Centaur"),
     Species("DD", "Deep Dwarf"),
@@ -21,7 +27,6 @@ SPECIES = {
     Species("Gn", "Gnoll"),
     Species("Gr", "Gargoyle"),
     Species("HO", "Hill Orc"),
-    Species("Ha", "Halfling"),
     Species("Hu", "Human"),
     Species("Ko", "Kobold"),
     Species("Mf", "Merfolk"),
@@ -38,11 +43,13 @@ SPECIES = {
 }
 
 BACKGROUNDS = {
+    Background("Ac", "Archaeologist"),
+    Background("Ro", "Rogue"),
+    Background("Re", "Reaver"),
+    Background("SA", "Sloth Apostle"),
     Background("AE", "Air Elementalist"),
     Background("AK", "Abyssal Knight"),
     Background("AM", "Arcane Marksman"),
-    Background("Ar", "Artificer"),
-    Background("As", "Assassin"),
     Background("Be", "Berserker"),
     Background("CK", "Chaos Knight"),
     Background("Cj", "Conjurer"),

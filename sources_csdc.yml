@@ -1,50 +1,6 @@
 sources:
-  - name: cao
-    base: http://crawl.akrasiac.org
-    milestones: 'milestones22'
-    logfile: 'logfile22'
-
-  - name: cdo
-    base: http://crawl.develz.org
-    milestones: 'milestones-0.22.txt'
-    logfile: 'allgames-0.22.txt'
-
-  - name: cue
-    aliases:
-      - cln
-      - clan
-    base: http://underhound.eu:81/crawl/meta
-    logfile: '0.22/logfile'
-    milestones: '0.22/milestones'
-
-  - name: cwz
-    base: http://webzook.net/soup
-    logfile: '0.22/logfile'
-    milestones: '0.22/milestones'
-
-  - name: cbro
-    aliases:
-      - cbo
-    base: http://crawl.berotato.org/crawl/meta
-    logfile: '0.22/logfile'
-    milestones: '0.22/milestones'
-
-  - name: cxc
-    base: http://crawl.xtahua.com/crawl/meta
-    logfile: '0.22/logfile'
-    milestones: '0.22/milestones'
-
-  - name: lld
-    base: http://lazy-life.ddo.jp/mirror/meta
-    logfile: '0.22/logfile'
-    milestones: '0.22/milestones'
 
   - name: cpo
     base: https://crawl.project357.org
-    logfile: 'dcss-logfiles-0.22'
-    milestones: 'dcss-milestones-0.22'
-
-  - name: cjr
-    base: https://crawl.jorgrun.rocks/meta
-    logfile: '0.22/logfile'
-    milestones: '0.22/milestones'
+    logfile: 'dcss-logfiles-bcrawl'
+    milestones: 'dcss-milestones-bcrawl'

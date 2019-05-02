@@ -19,13 +19,13 @@ def head(static, title):
     {1}</head>""".format(title, refresh)
 
 
-version = '0.22'
+version = '1.12'
 
 def logoblock(subhead):
     sh = "<h2>{}</h2>".format(subhead) if subhead != None else ""
     return """<div id="title">
-    <img id="logo" src="static/logo.png">
-    <h1 id="sdc">{} sudden death challenges</h1>
+    <br><img id="logo" src="static/logo.png"><br><br><br>
+    <h1 id="sdc">{} sudden death tournament<br><br></h1>
     {}</div>""".format(version, sh)
 
 
@@ -46,22 +46,15 @@ def wkmenu(wk):
             menuitem += wkurl(w)
         else:
             menuitem += '{}'
-        sp += '<span class="menu">{}</span>'.format(menuitem.format("Week " +
+        sp += '<span class="menu">{}</span>'.format(menuitem.format("Combo " +
             w.number))
     return sp
 
 
 def wkinfo(wk):
     sp = ""
-    sp += '<div id="times"><span class="label">Week of '
-    sp += wk.start.strftime(DATEFMT) + '</span></div>'
-    sp += ('<div id="combo"><span class="label">Character: </span>' +
+    sp += ('<div id="combo">' +
             '{0} {1}</div>\n'.format(wk.species.name, wk.background.name))
-    sp += ('<div id="bonus"><span class="label">Tier I Bonus: </span>'
-            + wk.tier1.description + '<br/>\n'
-            + '<span class="label">Tier II Bonus: </span>'
-            + wk.tier2.description +'</div>\n')
-    sp += ('<div id="gods"><span class="label">Gods: </span>')
     sp += ", ".join([ g.name for g in wk.gods])
     sp += '</div>'
 
@@ -76,9 +69,9 @@ def description(wk, url):
     s = ""
 
     if wk.start > datetime.datetime.now():
-        s += "Week {0}"
+        s += "Character {0}"
     else:
-        s += "Week {0}&mdash;{1}{2}"
+        s += "Character {0}&mdash;{1}{2}"
 
     if url and wk.start <= datetime.datetime.now():
         s = wkurl(wk).format(s)
@@ -92,15 +85,8 @@ def scoretable(wk, div):
     sp = ""
     sp += ("""<table><tr class="head">
     <th>Player</th>
-    <th>Unique Kill</th>
-    <th>Branch Enter</th>
-    <th>Branch End</th>
-    <th>Champion God</th>
-    <th>Collect a Rune</th>
-    <th>Collect 3 Runes</th>
+    <th>Reach L12</th>
     <th>Win</th>
-    <th>Bonus I</th>
-    <th>Bonus II</th>
     <th>Total</th>
     </tr>""")
 
@@ -120,15 +106,8 @@ def scoretable(wk, div):
                 morgue_url(g.Game), g.Game.player.name))
             sp += ( (('<td class="pt">{}</td>' * 9) 
                 + '<td class="total">{}</td>').format(
-                g.uniq,
-                g.brenter,
-                g.brend,
-                g.god,
                 g.rune,
-                g.threerune,
                 g.win,
-                g.bonusone,
-                g.bonustwo,
                 g.total))
             sp += ('</tr>\n')
 
@@ -148,15 +127,14 @@ def standingstable():
         sp += '<tr class="head"><th>Player</th>'
         sp += ''.join(['<th>' + description(wk, True) +'</th>' for wk in csdc.weeks
             ])
-        sp +='<th>15 Rune Win</th><th>Win &lt;50k Turns</th><th>Zig:$</th>'
-        sp +='<th>Zot @ XL20</th><th>No Lair Win</th><th>Ascetic Rune</th>'
+        sp +='<th>Runes</th><th>Gods</th><th>Speed</th>'
         sp += '<th>Score</th></tr>'
         for p in csdc.overview().with_session(s).all():
             sp += '<tr>'
             sp += '<td class="name">{}</td>'.format(p.CsdcContestant.player.name)
             sp += ('<td class="pt">{}</td>' * len(csdc.weeks)).format(
                     *[ _ifnone(getattr(p, "wk" + wk.number), "") for wk in csdc.weeks])
-            sp += '<td class="pt"></td>' * 6
+            sp += '<td class="pt"></td>' * 3
             sp += '<td class="total">{}</td>'.format(p.grandtotal)
             sp += '</tr>'
 
@@ -183,56 +161,36 @@ def standingsplchold():
 def overviewpage():
     pagestr = """
     <pre id="cover">
-_You are suddenly pulled into a different region of the Abyss!
-_A floating eye, a glowing orange brain, 4 small abominations and 8 large
- abominations come into view.</pre>
-<p>The Crawl Sudden Death Challenges is a competition that aims to fill a
-Crawl niche not currently filled by the biannual version release tournaments.
-The idea is for players to compete by trying to do as well as possible in a
-game of Crawl with one attempt only; if you die, that challenge is over (thus
-"sudden death", though you may&mdash;<em>will</em>&mdash;also die suddenly). This competition is
-a lower time commitment event that aims to challenge players while
-simultaneously encouraging unusual characters and play styles that you might
-not normally consider.</p>
-
-<p>Milestones from CSDC games will be announced in the IRC channel
-<code>##csdc</code> on <a href="http://freenode.net">freenode</a>. 
-It's a great place to hang out if you want to live spectate ongoing games or
-talk with other people about the competition.</p>
+Near the exit of the stairs, a rune flashes!
+You find yourself in a tournament!
+Yermak, Manman, Dynast, and Ultraviolent4 come into view.</pre>
+<br><br>
 
 <h2>Competition Format</h2>
 
 <ul>
-<li>Each challenge consists of playing a randomly chosen Crawl combo.</li>
-<li>You get <em>one</em>  attempt to play each combo.</li>
+<li>8 interesting combos to play have been selected for this competition.</li>
+<li>They can be played in any order.</li>
+<li>You get <em>one</em> attempt to play each combo, but can retry <em>once</em> if you have not reached level 5 with that combo.</li>
 <li>The goal is to advance as far as possible (and win!) in each game, scoring
 points by reaching various in-game milestones.</li>
 <li>Details on rules and scoring are available on the <a
 href="rules.html">rules page</a>.</li>
 </ul>
 
-<h2>Schedule</h2>
+<h2>Tournament Combos</h2>
 
 {}
 
-<h2>Sign Up</h2>
+<h2>How to Participate</h2>
 
-<p>In order to sign up, set the first line of your 0.22 rcfile to</p> <pre
-id="rc"># csdc</pre><p>on <a
-href="https://crawl.develz.org/play.htm">any of the official online servers</a>
-before the start of the first week. Your name will appear in the standings once
-you've done this correctly.</p>
+<p>To participate, just play bcrawl online on <a href="https://crawl.develz.org/play.htm">CKO (New York)</a> or <a href="https://crawl.develz.org/play.htm">CPO (Australia)</a> during the tournament period.</p>
 
 <h2>Credits</h2>
-
-<p>Original CSDC rules and organization by <a
-href="http://crawl.akrasiac.org/scoring/players/walkerboh.html">WalkerBoh</a>.
-Postquell IRC support by <a
-href="http://crawl.akrasiac.org/scoring/players/kramin.html">Kramin</a>. Dungeon
-Crawl Stone Soup by the <a
-href="https://github.com/crawl/crawl/blob/master/crawl-ref/CREDITS.txt">Stone
-Soup Team</a>. Thank you to all the players who made runs in the beta. I am your host, <a
-href="http://crawl.akrasiac.org/scoring/players/ebering.html">ebering</a>."""
+<p>hosting, rules: bhauth<br>
+programming: bhauth, doesnty<br>
+based on code by: ebering, zxc, Kramin<br></p>
+"""
 
     wklist = "<ul id=schedule>"
     for wk in csdc.weeks:
@@ -241,82 +199,42 @@ href="http://crawl.akrasiac.org/scoring/players/ebering.html">ebering</a>."""
                 wk.end.strftime(DATEFMT))
     wklist += "</ul>"
 
-    return page( static = True, title="Crawl Sudden Death Challenges", content = pagestr.format(wklist))
+    return page( static = True, title="bcrawl tournament", content = pagestr.format(wklist))
 
 def rulespage():
     pagestr ="""
     <ol>
-<li>Each challenge consists of playing a randomly chosen Crawl race/class
-combo (e.g. MiBe). The combo for each week of the competition will be announced
-at 00:00 UTC on the Thursday starting that week. All players have one week to
-finish a game using that combo. Only milestones recorded during the week will
-count for scoring.</li>
-<li>Your first {} game started on an official server during the week will count
+<li>Each challenge consists of playing a specific race/class
+combo (e.g. MiBe). Only milestones recorded during the tournament period will count for scoring.</li>
+<li>Your first game of each combo that's started on an official server during the tournament period will count
 for scoring. This is the only allowed attempt, subject to rule 3 below.</li>
 <li>One redo per week is allowed if player XL < 5 (i.e., no redo once you hit
-XL 5). The highest CSDC score of the two games is counted towards your score.</li>
-<li>Each challenge has an optional bonus challenge in addition to the
-race/class combo. Each bonus will have two tiers; the second tier is more
-difficult and worth more points.</li>
-<li>Each challenge includes a list of gods. A bonus point can be earned upon
-reaching ****** piety (or on worship with Gozag or Xom) with one of the listed
-gods (but only if it is the first god worshipped that game, and you don't
-abandon or get excommunicated later). If the combo for the week is a zealot
-background or demigod, no god points are available.</li>
-<li>The season consists of 7 challenges total (i.e., 7 different combos). Each
-race and background will be selected at most once during the competition.</li>
-<li>The final rankings will be tallied at the end of week 7 and represent the
-final outcome. The player with the highest CSDC score is the champion.</li>
+XL 5). The highest score of the two games is counted towards your score.</li>
 <li>Tiebreakers are (in order): number of weekly bonus points, highest in-game
 score.</li>
 </ol>
 
 <h2>Scoring</h2>
 
-<p>Scoring is divided into two parts, weekly points assigned to each game
-played, and one-time points awarded once per season regardless of how many
+<p>Scoring is divided into two parts, game points assigned to each game
+played, and one-time points awarded once regardless of how many
 games achieve them.</p>
 
-<table class="info"><tr class="head"><th>Weekly points (can be earned each
-week)</th><th></th></tr>
-<tr><td class="name">Kill a unique:</td><td class="pt">1</td></tr>
-<tr><td class="name">Enter a multi-level branch of the dungeon:</td><td class="pt">1</td></tr>
-<tr><td class="name">Reach the end of a multi-level branch (including D):</td><td class="pt">1</td></tr>
-<tr><td class="name">Champion a listed god:</td><td class="pt">1</td></tr>
-<tr><td class="name">Collect a rune:</td><td class="pt">1</td></tr>
-<tr><td class="name">Collect 3 or more runes:</td><td class="pt">1</td></tr>
-<tr><td class="name">Win:</td><td class="pt">1</td></tr>
-<tr><td class="name">Complete a Tier I bonus:</td><td class="pt">1</td></tr>
-<tr><td class="name">Complete a Tier II bonus:</td><td class="pt">2</td></tr>
-<tr class="head" id="onetime"><th>One-time points (earned once in the
-competition)</th><th></th></tr>
-<tr><td class="name">Win a game with 15 runes:</td><td class="pt">3</td></tr>
-<tr><td class="name">Win a game in under 50,000 turns:</td><td class="pt">3</td></tr>
-<tr><td class="name">Clear a Ziggurat:</td><td class="pt">3</td></tr>
-<tr><td class="name">Enter Zot at XL 20 or lower:</td><td class="pt">6</td></tr>
-<tr><td class="name">Win a game without entering lair:</td><td class="pt">6</td></tr>
-<tr><td class="name">Get a rune without using potions or scrolls:</td><td class="pt">6</td></tr>
+<table class="info"><tr class="head"><th>Game points (can be earned for each combo)</th><th></th></tr>
+<tr><td class="name">reach level 12: 12 points</td></tr>
+<tr><td class="name">win: 20 points</td></tr>
 </table>
-
-<p class="notes"> It will not always be the case that earning a
-Tier II bonus implies that you have earned a Tier I bonus, these points can be
-awarded separately. Unless specified, a bonus or one time point does not
-require you to win to earn the point.</p>
+<table class="info"><tr class="head" id="onetime"><th>One-time points (earned once in the
+competition)</th><th></th></tr>
+<tr><td class="name">1000/(fastest realtime win in minutes) points</td></tr>
+<tr><td class="name">10 points each for the following runes: slimy, silver, iron, icy, obsidian, bone</td></tr>
+<tr><td class="name">4 points for each of these gods you reach ****** piety with: Dithmenos, Fedhas, Nemelex, Wu Jian, Sif Muna, Uskayaw</td></tr>
+</table>
 
 <h2>Fair Crawling</h2>
 
-<p>All contestants will compete with commonly recognized principles of
-sportsmanship and fair play. Failure to do so will result in disqualification
-without recourse and your entry will be deleted from the scoring database. If
-you are uncertain if something is "fair play" then ask for clarification before
-doing it. Ignorance and negligence are not excuses for poor behavior.</p>
-
-<p>All contestants acknowledge an obligation not to commit misconduct in
-relation to their participation.  Misconduct is any act that is a breach of
-good manners, a breach of good sportsmanship, or unethical behavior. Misconduct
-will also result in disqualification without recourse and your entry will be
-deleted from the scoring database. Severe misconduct will lead to exclusion from
-future CSDC events.</p>
+<p>Players using multiple accounts for extra attempts may be disqualified. Macros (including for multiple tabs/autoattacks) are allowed, but accounts playing at speeds implausible for humans may be disqualified. bhauth reserves the right to disqualify players for any reason.</p>
+<p></p>
 """
     return page(static=True, subhead="Rules", content = pagestr.format("0.22"))
 
