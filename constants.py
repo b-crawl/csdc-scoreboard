@@ -44,7 +44,7 @@ SPECIES = {
 
 BACKGROUNDS = {
     Background("Ac", "Archaeologist"),
-    Background("Ro", "Rogue"),
+    Background("Rg", "Rogue"),
     Background("Re", "Reaver"),
     Background("SA", "Sloth Apostle"),
     Background("AE", "Air Elementalist"),
@@ -168,6 +168,7 @@ BRANCHES = {
     Branch("Coc", "Cocytus", True),
     Branch("Bazaar", "Bazaar", False),
     Branch("WizLab", "Wizard's Laboratory", False),
+    Branch("Gauntlet", "Gauntlet", False),
     Branch("Trove", "Treasure Trove", False),
     Branch("Desolation", "Desolation of Salt", False),
 }

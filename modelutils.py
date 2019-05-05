@@ -11,15 +11,15 @@ import constants as const
 def logline_to_dict(logline: str) -> dict:
     """Convert a logline into a sanitized dict"""
     data = {}
-    pairs = re.split('(?<!:):(?!:)', logline.strip())
+    logline = logline.replace("::", "@@")
+    pairs = logline.split(':')
     for p in pairs:
-        p = p.replace('::',':')
+        p = p.replace("@@",":")
         keyval = p.split('=')
         try:
             data[keyval[0]] = keyval[1]
         except IndexError as e:
             logging.error('error "{}" in keyval "{}", logline "{}"'.format(e,keyval,logline))
-    data["v"] = re.match(r"(0.\d+)", data["v"]).group()
     if "god" not in data:
         data["god"] = "GOD_NO_GOD"
 
@@ -32,9 +32,6 @@ def logline_to_dict(logline: str) -> dict:
 
     data["runes"] = data.get("urune", 0)
     # D:0 is D:$ in logfile so we came from D:1 in that case
-    data["oplace"] = data.get("oplace",
-            data["place"].translate(str.maketrans("$", "1")))
-
     return data
 
 def crawl_date_to_datetime(d: str) -> datetime.datetime:

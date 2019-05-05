@@ -256,7 +256,7 @@ def get_place(s: sqlalchemy.orm.session.Session, branch: Branch, lvl: int) -> Pl
 @functools.lru_cache(maxsize=256)
 def get_place_from_string(s: sqlalchemy.orm.session.Session, spot: str) -> Place:
     """Get a place in crawl Place:Lev string format"""
-    code = spot.split(":") + [1]; # default to lvl 1 if missing 
+    code = spot.replace("$", "0").split(":") + [1]; # default to lvl 1 if missing 
     return get_place(s, get_branch(s, code[0]), int(code[1]));
 
 
@@ -392,7 +392,7 @@ def add_event(s: sqlalchemy.orm.session.Session, data: dict) -> None:
         "gid"      : data["gid"],
         "xl"       : data["xl"],
         "place_id" : get_place(s, branch, data["lvl"]).id,
-        "oplace_id" : get_place_from_string(s, data["oplace"]).id,
+        "oplace_id" : get_place_from_string(s, data["place"]).id,
         "god_id"   : get_god(s, data["god"]).id,
         "turn"     : data["turn"],
         "dur"      : data["dur"],

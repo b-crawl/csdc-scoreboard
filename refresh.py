@@ -23,10 +23,12 @@ def _refresh_from_file(file, src, sess):
         iter = 0
         for line in f:
             try:
-                data = modelutils.logline_to_dict(line.decode())
-                data["src_abbr"] = src.name
-                if not ('type' in data and data['type'] == 'crash'):
-                    add_event(sess, data)
+                decoded_line = line.decode()
+                if(decoded_line[0:4] == "v=1."):
+                    data = modelutils.logline_to_dict(decoded_line)
+                    data["src_abbr"] = src.name
+                    if not ('type' in data and data['type'] == 'crash'):
+                        add_event(sess, data)
             except KeyError as e:
                 logging.error('key {} not found'.format(e))
             except Exception as e:  # how scandalous! Don't want one broken line to break everything

@@ -279,7 +279,7 @@ def initialize_weeks():
         weeks.append(CsdcWeek(
                 number = "4",
                 species = "Vp",
-                background = "Ro",
+                background = "Rg",
                 gods = (),
                 start = datetime.datetime(2018,10,25),
                 end = datetime.datetime(2019,11,1)))
