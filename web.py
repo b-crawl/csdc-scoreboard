@@ -189,7 +189,8 @@ href="rules.html">rules page</a>.</li>
 <h2>Credits</h2>
 <p>hosting, rules: bhauth<br>
 programming: bhauth, doesnty<br>
-based on code by: ebering, zxc, Kramin<br></p>
+based on code by: <a href="https://github.com/ebering/csdc-scoreboard">ebering</a>, zxc, Kramin<br>
+logo design: <a href="https://www.youtube.com/channel/UCzmCTHcYFM5nnAPBYE26Fng">Demise</a><br></p>
 """
 
     wklist = "<ul id=schedule>"

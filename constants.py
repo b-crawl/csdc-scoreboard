@@ -77,6 +77,7 @@ GODS = {
     God("Beogh"),
     God("Cheibriados"),
     God("Dithmenos"),
+    God("Demigod"),
     God("Elyvilon"),
     God("Fedhas"),
     God("Gozag"),
