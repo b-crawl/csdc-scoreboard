@@ -92,6 +92,7 @@ class CsdcWeek:
 			self.start = kwargs["start"]
 			self.end = kwargs["end"]
 
+# todo: clean up the retry removal
 		g1 = aliased(Game)
 		g2 = aliased(Game)
 		possiblegames = self._valid_games(g1).add_columns(
@@ -108,9 +109,7 @@ class CsdcWeek:
 		self.gids = Query(possiblegames.c.gid).outerjoin(pg2,
 				and_(pg2.c.player_id == possiblegames.c.player_id,
 					possiblegames.c.start > pg2.c.start)
-				).filter(or_(pg2.c.gid == None,
-					and_(pg2.c.end != None, pg2.c.xl < 5)))
-
+				).filter(pg2.c.gid == None)
 
 	def _valid_milestone(self):
 		return Query(Milestone).filter(Milestone.gid == Game.gid,
