@@ -133,6 +133,11 @@ class CsdcWeek:
 			Milestone.runes >= n
 		).exists()
 
+	def _XL(self, n):
+		return self._valid_milestone().filter(
+			Milestone.xl >= n
+		).exists()
+
 	def _win(self):
 		with get_session() as s:
 			ktyp_id = get_ktyp(s, "winning").id
@@ -144,18 +149,16 @@ class CsdcWeek:
 	def scorecard(self):
 		sc = Query([Game.gid,
 			Game.player_id,
-			type_coerce(self._rune(1), Integer).label("rune"),
-			type_coerce(self._rune(3), Integer).label("threerune"),
+			type_coerce(self._XL(12), Integer).label("xl"),
 			self._win().label("win"),
 		]).filter(Game.gid.in_(self.gids)).subquery()
 
 		return Query( [Player, Game]).select_from(Player).outerjoin(Game,
 				Game.gid == sc.c.gid).add_columns(
-					sc.c.rune,
-					sc.c.threerune,
+					sc.c.xl,
 					sc.c.win,
 					func.max(
-						sc.c.rune
+						sc.c.xl
 						+ sc.c.win
 					).label("total")
 			).group_by(sc.c.player_id).order_by(desc("total"),Game.start)
