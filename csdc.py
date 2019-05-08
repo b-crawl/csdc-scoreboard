@@ -142,15 +142,15 @@ class CsdcWeek:
 		with get_session() as s:
 			ktyp_id = get_ktyp(s, "winning").id
 
-		return type_coerce(and_(Game.ktyp_id != None, 
+		return and_(Game.ktyp_id != None, 
 			Game.ktyp_id == ktyp_id,
-			Game.end <= self.end), Integer)
+			Game.end <= self.end)
 
 	def scorecard(self):
 		sc = Query([Game.gid,
 			Game.player_id,
-			type_coerce(self._XL(12), Integer).label("xl"),
-			self._win().label("win"),
+			type_coerce(self._XL(12) * 12, Integer).label("xl"),
+			type_coerce(self._win() * 20, Integer).label("win"),
 		]).filter(Game.gid.in_(self.gids)).subquery()
 
 		return Query( [Player, Game]).select_from(Player).outerjoin(Game,
