@@ -240,6 +240,6 @@ def overview():
 
 	return q.add_column(
 			sum(totalcols).label("grandtotal")
-		).order_by(desc("grandtotal"))
+		).filter(sum(totalcols) > 0).order_by(desc("grandtotal"))
 
 divisions = [1]
