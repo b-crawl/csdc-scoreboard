@@ -85,7 +85,7 @@ def scoretable(wk, div):
 	sp = ""
 	sp += ("""<table><tr class="head">
 	<th>Player</th>
-	<th>Reach L12</th>
+	<th>Reach XL12</th>
 	<th>Win</th>
 	<th>Total</th>
 	</tr>""")
@@ -134,7 +134,7 @@ def standingstable():
 			sp += '<td class="name">{}</td>'.format(p.Player.name)
 			sp += ('<td class="pt">{}</td>' * len(csdc.weeks)).format(
 					*[ _ifnone(getattr(p, "wk" + wk.number), "") for wk in csdc.weeks])
-			sp += '<td class="pt"></td>' * 3
+			sp += ('<td class="pt">{}</td>' * 3).format(123, 123, 123)
 			sp += '<td class="total">{}</td>'.format(p.grandtotal)
 			sp += '</tr>'
 
