@@ -131,7 +131,7 @@ def standingstable():
 		sp += '<th>Score</th></tr>'
 		for p in csdc.overview().with_session(s).all():
 			sp += '<tr>'
-			sp += '<td class="name">{}</td>'.format(p.CsdcContestant.player.name)
+			sp += '<td class="name">{}</td>'.format(p.Player.name)
 			sp += ('<td class="pt">{}</td>' * len(csdc.weeks)).format(
 					*[ _ifnone(getattr(p, "wk" + wk.number), "") for wk in csdc.weeks])
 			sp += '<td class="pt"></td>' * 3
