@@ -171,7 +171,7 @@ Yermak, Manman, Dynast, and Ultraviolent4 come into view.</pre>
 <ul>
 <li>8 interesting combos to play have been selected for this competition.</li>
 <li>They can be played in any order.</li>
-<li>You get <em>one</em> attempt to play each combo, but can retry <em>once</em> if you have not reached level 5 with that combo.</li>
+<li>You get <em>one</em> attempt to play each combo.</li>
 <li>The goal is to advance as far as possible (and win!) in each game, scoring
 points by reaching various in-game milestones.</li>
 <li>Details on rules and scoring are available on the <a
@@ -208,11 +208,7 @@ def rulespage():
 <li>Each challenge consists of playing a specific race/class
 combo (e.g. MiBe). Only milestones recorded during the tournament period will count for scoring.</li>
 <li>Your first game of each combo that's started on an official server during the tournament period will count
-for scoring. This is the only allowed attempt, subject to rule 3 below.</li>
-<li>One redo per week is allowed if player XL < 5 (i.e., no redo once you hit
-XL 5). The highest score of the two games is counted towards your score.</li>
-<li>Tiebreakers are (in order): number of weekly bonus points, highest in-game
-score.</li>
+for scoring. This is the only allowed attempt.</li>
 </ol>
 
 <h2>Scoring</h2>
