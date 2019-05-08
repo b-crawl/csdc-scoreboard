@@ -8,159 +8,159 @@ DATEFMT = "%Y-%m-%d"
 DATETIMEFMT = DATEFMT + " " + TIMEFMT
 
 def updated():
-    now = datetime.datetime.now(datetime.timezone.utc).strftime(DATETIMEFMT)
-    return '<span id="updated"><span class="label">Updated: </span>{}</span></div>'.format(now)
+	now = datetime.datetime.now(datetime.timezone.utc).strftime(DATETIMEFMT)
+	return '<span id="updated"><span class="label">Updated: </span>{}</span></div>'.format(now)
 
 
 def head(static, title):
-    refresh = '<meta http-equiv="refresh" content="300">' if not static else ""
-    return """<head><title>{0}</title>
-    <link rel="stylesheet" href="static/score.css">
-    {1}</head>""".format(title, refresh)
+	refresh = '<meta http-equiv="refresh" content="300">' if not static else ""
+	return """<head><title>{0}</title>
+	<link rel="stylesheet" href="static/score.css">
+	{1}</head>""".format(title, refresh)
 
 
 version = '1.12'
 
 def logoblock(subhead):
-    sh = "<h2>{}</h2>".format(subhead) if subhead != None else ""
-    return """<div id="title">
-    <br><img id="logo" src="static/logo.png"><br><br><br>
-    <h1 id="sdc">{} sudden death tournament<br><br></h1>
-    {}</div>""".format(version, sh)
+	sh = "<h2>{}</h2>".format(subhead) if subhead != None else ""
+	return """<div id="title">
+	<br><img id="logo" src="static/logo.png"><br><br><br>
+	<h1 id="sdc">{} sudden death tournament<br><br></h1>
+	{}</div>""".format(version, sh)
 
 
 def mainmenu():
-    return ('<span class="menu"><a href="index.html">Overview</a></span>' +
-        '<span class="menu"><a href="rules.html">Rules</a></span>' + 
-        '<span class="menu"><a href="standings.html">Standings</a></span>' +
-        '<span class="menuspacer"></span>')
+	return ('<span class="menu"><a href="index.html">Overview</a></span>' +
+		'<span class="menu"><a href="rules.html">Rules</a></span>' + 
+		'<span class="menu"><a href="standings.html">Standings</a></span>' +
+		'<span class="menuspacer"></span>')
 
 
 def wkmenu(wk):
-    sp = ""
-    for w in csdc.weeks:
-        menuitem = ""
-        if ((wk is None or 
-            w.number != wk.number)
-            and w.start <= datetime.datetime.now()):
-            menuitem += wkurl(w)
-        else:
-            menuitem += '{}'
-        sp += '<span class="menu">{}</span>'.format(menuitem.format("Combo " +
-            w.number))
-    return sp
+	sp = ""
+	for w in csdc.weeks:
+		menuitem = ""
+		if ((wk is None or 
+			w.number != wk.number)
+			and w.start <= datetime.datetime.now()):
+			menuitem += wkurl(w)
+		else:
+			menuitem += '{}'
+		sp += '<span class="menu">{}</span>'.format(menuitem.format("Combo " +
+			w.number))
+	return sp
 
 
 def wkinfo(wk):
-    sp = ""
-    sp += ('<div id="combo">' +
-            '{0} {1}</div>\n'.format(wk.species.name, wk.background.name))
-    sp += ", ".join([ g.name for g in wk.gods])
-    sp += '</div>'
+	sp = ""
+	sp += ('<div id="combo">' +
+			'{0} {1}</div>\n'.format(wk.species.name, wk.background.name))
+	sp += ", ".join([ g.name for g in wk.gods])
+	sp += '</div>'
 
-    return sp
+	return sp
 
 
 def wkurl(wk):
-    return '<a href="'+ wk.number + '.html">{}</a>'
+	return '<a href="'+ wk.number + '.html">{}</a>'
 
 
 def description(wk, url):
-    s = ""
+	s = ""
 
-    if wk.start > datetime.datetime.now():
-        s += "Character {0}"
-    else:
-        s += "Character {0}&mdash;{1}{2}"
+	if wk.start > datetime.datetime.now():
+		s += "Character {0}"
+	else:
+		s += "Character {0}&mdash;{1}{2}"
 
-    if url and wk.start <= datetime.datetime.now():
-        s = wkurl(wk).format(s)
+	if url and wk.start <= datetime.datetime.now():
+		s = wkurl(wk).format(s)
 
-    return s.format(wk.number, wk.species.short,
-                wk.background.short)
+	return s.format(wk.number, wk.species.short,
+				wk.background.short)
 
 
 
 def scoretable(wk, div):
-    sp = ""
-    sp += ("""<table><tr class="head">
-    <th>Player</th>
-    <th>Reach L12</th>
-    <th>Win</th>
-    <th>Total</th>
-    </tr>""")
+	sp = ""
+	sp += ("""<table><tr class="head">
+	<th>Player</th>
+	<th>Reach L12</th>
+	<th>Win</th>
+	<th>Total</th>
+	</tr>""")
 
-    with get_session() as s:
-        for g in wk.scorecard().with_session(s).all():
-            if g.Game == None:
-                sp += """<tr class="{}"><td class="name">{}</td>
-                <td colspan="9"></td><td class="total">0</td></tr>""".format(
-                        "none", g.Player.name)
-                continue
+	with get_session() as s:
+		for g in wk.scorecard().with_session(s).all():
+			if g.Game == None:
+				sp += """<tr class="{}"><td class="name">{}</td>
+				<td colspan="9"></td><td class="total">0</td></tr>""".format(
+						"none", g.Player.name)
+				continue
 
-            sp += ('<tr class="{}">'.format(
-                "won" if g.Game.won and g.Game.end <= wk.end else
-                "alive" if g.Game.alive else
-                "dead"))
-            sp += ('<td class="name"><a href="{}">{}</a></td>'.format(
-                morgue_url(g.Game), g.Game.player.name))
-            sp += ( (('<td class="pt">{}</td>' * 9) 
-                + '<td class="total">{}</td>').format(
-                g.rune,
-                g.win,
-                g.total))
-            sp += ('</tr>\n')
+			sp += ('<tr class="{}">'.format(
+				"won" if g.Game.won and g.Game.end <= wk.end else
+				"alive" if g.Game.alive else
+				"dead"))
+			sp += ('<td class="name"><a href="{}">{}</a></td>'.format(
+				morgue_url(g.Game), g.Game.player.name))
+			sp += ( (('<td class="pt">{}</td>' * 9) 
+				+ '<td class="total">{}</td>').format(
+				g.rune,
+				g.win,
+				g.total))
+			sp += ('</tr>\n')
 
-    sp += '</table>'
+	sp += '</table>'
 
-    return sp
+	return sp
 
 
 def _ifnone(x, d):
-    """this should be a language builtin like it is in sql"""
-    return x if x is not None else d
+	"""this should be a language builtin like it is in sql"""
+	return x if x is not None else d
 
 
 def standingstable():
-    with get_session() as s:
-        sp = "<table>"
-        sp += '<tr class="head"><th>Player</th>'
-        sp += ''.join(['<th>' + description(wk, True) +'</th>' for wk in csdc.weeks
-            ])
-        sp +='<th>Runes</th><th>Gods</th><th>Speed</th>'
-        sp += '<th>Score</th></tr>'
-        for p in csdc.overview().with_session(s).all():
-            sp += '<tr>'
-            sp += '<td class="name">{}</td>'.format(p.CsdcContestant.player.name)
-            sp += ('<td class="pt">{}</td>' * len(csdc.weeks)).format(
-                    *[ _ifnone(getattr(p, "wk" + wk.number), "") for wk in csdc.weeks])
-            sp += '<td class="pt"></td>' * 3
-            sp += '<td class="total">{}</td>'.format(p.grandtotal)
-            sp += '</tr>'
+	with get_session() as s:
+		sp = "<table>"
+		sp += '<tr class="head"><th>Player</th>'
+		sp += ''.join(['<th>' + description(wk, True) +'</th>' for wk in csdc.weeks
+			])
+		sp +='<th>Runes</th><th>Gods</th><th>Speed</th>'
+		sp += '<th>Score</th></tr>'
+		for p in csdc.overview().with_session(s).all():
+			sp += '<tr>'
+			sp += '<td class="name">{}</td>'.format(p.CsdcContestant.player.name)
+			sp += ('<td class="pt">{}</td>' * len(csdc.weeks)).format(
+					*[ _ifnone(getattr(p, "wk" + wk.number), "") for wk in csdc.weeks])
+			sp += '<td class="pt"></td>' * 3
+			sp += '<td class="total">{}</td>'.format(p.grandtotal)
+			sp += '</tr>'
 
-        return sp
+		return sp
 
 
 def scorepage(wk):
-    return page( static=False, subhead = description(wk, False),
-            content = wkinfo(wk) + 
-            " ".join([ scoretable(wk, d) for d in csdc.divisions]),
-            menu = wkmenu(wk))
+	return page( static=False, subhead = description(wk, False),
+			content = wkinfo(wk) + 
+			" ".join([ scoretable(wk, d) for d in csdc.divisions]),
+			menu = wkmenu(wk))
 
 
 def standingspage():
-    return page( static=False,
-            subhead = "Standings",
-            content = standingstable())
+	return page( static=False,
+			subhead = "Standings",
+			content = standingstable())
 
 def standingsplchold():
-    return page( static=True,
-            subhead = "Registrations are not yet being processed. Check back soon.",
-            content = "" )
+	return page( static=True,
+			subhead = "Registrations are not yet being processed. Check back soon.",
+			content = "" )
 
 def overviewpage():
-    pagestr = """
-    <pre id="cover">
+	pagestr = """
+	<pre id="cover">
 Near the exit of the stairs, a rune flashes!
 You find yourself in a tournament!
 Yermak, Manman, Dynast, and Ultraviolent4 come into view.</pre>
@@ -193,18 +193,18 @@ based on code by: <a href="https://github.com/ebering/csdc-scoreboard">ebering</
 logo design: <a href="https://www.youtube.com/channel/UCzmCTHcYFM5nnAPBYE26Fng">Demise</a><br></p>
 """
 
-    wklist = "<ul id=schedule>"
-    for wk in csdc.weeks:
-        wklist += '<li><span class=label>{}:</span> {} to {}'.format(description(wk,True),
-                wk.start.strftime(DATEFMT),
-                wk.end.strftime(DATEFMT))
-    wklist += "</ul>"
+	wklist = "<ul id=schedule>"
+	for wk in csdc.weeks:
+		wklist += '<li><span class=label>{}:</span> {} to {}'.format(description(wk,True),
+				wk.start.strftime(DATEFMT),
+				wk.end.strftime(DATEFMT))
+	wklist += "</ul>"
 
-    return page( static = True, title="bcrawl tournament", content = pagestr.format(wklist))
+	return page( static = True, title="bcrawl tournament", content = pagestr.format(wklist))
 
 def rulespage():
-    pagestr ="""
-    <ol>
+	pagestr ="""
+	<ol>
 <li>Each challenge consists of playing a specific race/class
 combo (e.g. MiBe). Only milestones recorded during the tournament period will count for scoring.</li>
 <li>Your first game of each combo that's started on an official server during the tournament period will count
@@ -237,15 +237,15 @@ competition)</th><th></th></tr>
 <p>Players using multiple accounts for extra attempts may be disqualified. Macros (including for multiple tabs/autoattacks) are allowed, but accounts playing at speeds implausible for humans may be disqualified. bhauth reserves the right to disqualify players for any reason.</p>
 <p></p>
 """
-    return page(static=True, subhead="Rules", content = pagestr.format("0.22"))
+	return page(static=True, subhead="Rules", content = pagestr.format("0.22"))
 
 
 def page(**kwargs):
-    """static, title, subhead, content"""
-    return """<html>{}<body>{}<div id="content">{}</div>
-    <div id="bottomtext">{}</div></body></html>""".format(
-            head(kwargs["static"],kwargs.get("title",kwargs.get("subhead",""))),
-            logoblock(kwargs.get("subhead","")),
-            kwargs["content"],
-            mainmenu() + kwargs.get("menu", wkmenu(None)) + (updated() if not kwargs["static"] else
-                ""))
+	"""static, title, subhead, content"""
+	return """<html>{}<body>{}<div id="content">{}</div>
+	<div id="bottomtext">{}</div></body></html>""".format(
+			head(kwargs["static"],kwargs.get("title",kwargs.get("subhead",""))),
+			logoblock(kwargs.get("subhead","")),
+			kwargs["content"],
+			mainmenu() + kwargs.get("menu", wkmenu(None)) + (updated() if not kwargs["static"] else
+				""))
