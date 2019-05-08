@@ -88,7 +88,6 @@ class CsdcWeek:
 			self.number = kwargs["number"]
 			self.species = get_species(s, kwargs["species"])
 			self.background = get_background(s, kwargs["background"])
-			self.gods = [ get_god(s, g) for g in kwargs["gods"] ]
 			self.start = kwargs["start"]
 			self.end = kwargs["end"]
 
@@ -115,22 +114,21 @@ class CsdcWeek:
 		return Query(Milestone).filter(Milestone.gid == Game.gid,
 				Milestone.time <= self.end);
 
-	def _god(self):
+	def _god(self, name):
 		with get_session() as s:
 			worship_id = get_verb(s, "god.worship").id
 			champ_id = get_verb(s, "god.maxpiety").id
 			abandon_id = get_verb(s, "god.renounce").id
-		god_ids = [g.id for g in self.gods]
+			god = get_god(s, name)
 		return and_(
-			or_(*[_champion_god(self._valid_milestone(), g) for g in
-				self.gods]),
+			_champion_god(self._valid_milestone(), god),
 			~self._valid_milestone().filter(
 				Milestone.verb_id == abandon_id
 			).exists())
 
-	def _rune(self, n):
+	def _rune(self, name):
 		return self._valid_milestone().filter(
-			Milestone.runes >= n
+			(Milestone.msg == "found a {} rune of Zot.".format(name))
 		).exists()
 
 	def _XL(self, n):

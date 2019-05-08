@@ -55,7 +55,6 @@ def wkinfo(wk):
 	sp = ""
 	sp += ('<div id="combo">' +
 			'{0} {1}</div>\n'.format(wk.species.name, wk.background.name))
-	sp += ", ".join([ g.name for g in wk.gods])
 	sp += '</div>'
 
 	return sp
