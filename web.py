@@ -104,7 +104,7 @@ def scoretable(wk, div):
 				"dead"))
 			sp += ('<td class="name"><a href="{}">{}</a></td>'.format(
 				morgue_url(g.Game), g.Game.player.name))
-			sp += ( (('<td class="pt">{}</td>' * 9) 
+			sp += ( (('<td class="pt">{}</td>' * 2) 
 				+ '<td class="total">{}</td>').format(
 				g.rune,
 				g.win,

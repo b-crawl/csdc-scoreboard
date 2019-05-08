@@ -149,9 +149,7 @@ class CsdcWeek:
 			self._win().label("win"),
 		]).filter(Game.gid.in_(self.gids)).subquery()
 
-		return Query( [Player, Game]).select_from(CsdcContestant).join(Player
-				).outerjoin(sc, CsdcContestant.player_id ==
-						sc.c.player_id).outerjoin(Game,
+		return Query( [Player, Game]).select_from(Player).outerjoin(Game,
 				Game.gid == sc.c.gid).add_columns(
 					sc.c.rune,
 					sc.c.threerune,
@@ -160,7 +158,7 @@ class CsdcWeek:
 						sc.c.rune
 						+ sc.c.win
 					).label("total")
-			).group_by(CsdcContestant.player_id).order_by(desc("total"),Game.start)
+			).group_by(sc.c.player_id).order_by(desc("total"),Game.start)
 
 weeks = []
 

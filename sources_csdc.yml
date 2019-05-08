@@ -5,3 +5,7 @@ sources:
     logfile: 'dcss-logfiles-bcrawl'
     milestones: 'dcss-milestones-bcrawl'
 
+  - name: cko
+    base: https://crawl.kelbi.org
+    logfile: 'crawl/meta/bcrawl/logfile'
+    milestones: 'crawl/meta/bcrawl/milestones'
