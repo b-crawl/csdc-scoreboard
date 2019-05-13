@@ -149,16 +149,18 @@ class CsdcWeek:
 			Game.player_id,
 			type_coerce(self._XL(12) * 12, Integer).label("xl"),
 			type_coerce(self._win() * 20, Integer).label("win"),
+			
+			type_coerce(self._god("Okawaru") * 4, Integer).label("oka"),
 		]).filter(Game.gid.in_(self.gids)).subquery()
 
 		return Query( [Player, Game]).select_from(Player).outerjoin(Game,
 				Game.gid == sc.c.gid).add_columns(
 					sc.c.xl,
 					sc.c.win,
-					func.max(
-						sc.c.xl
-						+ sc.c.win
-					).label("total")
+					
+					sc.c.oka,
+					
+					func.max(sc.c.xl + sc.c.win).label("total")
 			).group_by(sc.c.player_id).order_by(desc("total"),Game.start)
 
 weeks = []
@@ -231,9 +233,9 @@ def overview():
 	q = Query(Player)
 	totalcols = []
 	for wk in weeks:
+		wk_n = "wk" + wk.number
 		a = wk.scorecard().subquery()
-		q = q.outerjoin(a, Player.id == a.c.player_id
-				).add_column( a.c.total.label("wk" + wk.number))
+		q = q.outerjoin(a, Player.id == a.c.player_id).add_column(a.c.total.label(wk_n)).add_column(a.c.oka.label(wk_n + "oka"))
 
 	return q
 

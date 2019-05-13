@@ -135,28 +135,42 @@ def standingstable():
 			player_data = [p.Player.name]
 			total = 0
 			
+			bonus_gods = ["oka"]
+			god_bonus_list = [0 * len(bonus_gods)]
+			
 			for wk in csdc.weeks:
-				week_score = _ifnone(getattr(p, "wk" + wk.number), "")
+				wk_n = "wk" + wk.number
+				week_score = _ifnone(getattr(p, wk_n), "")
 				if week_score != "":
 					total += int(week_score)
 				player_data.append(week_score)
+				
+				for i in range(len(bonus_gods)):
+					wk_points = week_score = _ifnone(getattr(p, wk_n + bonus_gods[i]), "0")
+					god_bonus_list[i] = max(god_bonus_list[i], int(wk_points))
 			
-			bonus_scores = ["", "", ""]
+			runes_bonus = 0
+			god_bonus = sum(god_bonus_list)
+			speed_bonus = 0
+			bonus_scores = [runes_bonus, god_bonus, speed_bonus]
+			bonus_strings = []
+			
 			for bonus in bonus_scores:
-				if bonus != "":
-					total += int(bonus)
-			player_data += bonus_scores
+				total += bonus
+				bonus_strings.append(str(bonus))
+			
+			player_data += bonus_strings
 			
 			player_data.append(str(total))
 			if(total > 0):
 				player_scores.append(player_data)
 		
 		player_scores.sort(key=lambda x: x[-1], reverse=True)
+		bonus_types = 3
 		
 		for player in player_scores:
 			week_n = len(csdc.weeks)
-			bonus_n = 3
-			line = '<tr>' + '<td class="name">{}</td>' + ('<td class="pt">{}</td>' * week_n) + ('<td class="pt">{}</td>' * bonus_n) + '<td class="total">{}</td>' + '</tr>'
+			line = '<tr>' + '<td class="name">{}</td>' + ('<td class="pt">{}</td>' * week_n) + ('<td class="pt">{}</td>' * bonus_types) + '<td class="total">{}</td>' + '</tr>'
 			sp += line.format(*player)
 		
 		return sp
