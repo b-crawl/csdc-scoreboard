@@ -128,15 +128,33 @@ def standingstable():
 			])
 		sp +='<th>Runes</th><th>Gods</th><th>Speed</th>'
 		sp += '<th>Score</th></tr>'
+		
+		player_scores = []
+				
 		for p in csdc.overview().with_session(s).all():
-			sp += '<tr>'
-			sp += '<td class="name">{}</td>'.format(p.Player.name)
-			sp += ('<td class="pt">{}</td>' * len(csdc.weeks)).format(
-					*[ _ifnone(getattr(p, "wk" + wk.number), "") for wk in csdc.weeks])
-			sp += ('<td class="pt">{}</td>' * 3).format(123, 123, 123)
-			sp += '<td class="total">{}</td>'.format(p.grandtotal)
-			sp += '</tr>'
-
+			player_data = [p.Player.name]
+			total = 0
+			
+			for wk in csdc.weeks:
+				week_score = _ifnone(getattr(p, "wk" + wk.number), "")
+				if week_score != "":
+					total += int(week_score)
+				player_data.append(week_score)
+			
+			bonus_scores = ["123", "234", "345"]
+			for bonus in bonus_scores:
+				total += int(bonus)
+			player_data += bonus_scores
+			
+			player_data.append(str(total))
+			player_scores.append(player_data)
+		
+		for player in player_scores:
+			week_n = len(csdc.weeks)
+			bonus_n = 3
+			line = '<tr>' + '<td class="name">{}</td>' + ('<td class="pt">{}</td>' * week_n) + ('<td class="pt">{}</td>' * bonus_n) + '<td class="total">{}</td>' + '</tr>'
+			sp += line.format(*player)
+		
 		return sp
 
 
