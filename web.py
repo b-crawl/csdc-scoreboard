@@ -141,13 +141,17 @@ def standingstable():
 					total += int(week_score)
 				player_data.append(week_score)
 			
-			bonus_scores = ["123", "234", "345"]
+			bonus_scores = ["", "", ""]
 			for bonus in bonus_scores:
-				total += int(bonus)
+				if bonus != "":
+					total += int(bonus)
 			player_data += bonus_scores
 			
 			player_data.append(str(total))
-			player_scores.append(player_data)
+			if(total > 0):
+				player_scores.append(player_data)
+		
+		player_scores.sort(key=lambda x: x[-1], reverse=True)
 		
 		for player in player_scores:
 			week_n = len(csdc.weeks)

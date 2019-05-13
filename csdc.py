@@ -232,12 +232,9 @@ def overview():
 	totalcols = []
 	for wk in weeks:
 		a = wk.scorecard().subquery()
-		totalcols.append(func.ifnull(a.c.total, 0))
 		q = q.outerjoin(a, Player.id == a.c.player_id
 				).add_column( a.c.total.label("wk" + wk.number))
 
-	return q.add_column(
-			sum(totalcols).label("grandtotal")
-		).filter(sum(totalcols) > 0).order_by(desc("grandtotal"))
+	return q
 
 divisions = [1]
