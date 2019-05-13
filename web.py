@@ -161,7 +161,7 @@ def standingstable():
 			
 			player_data += bonus_strings
 			
-			player_data.append(str(total))
+			player_data += [str(total), total]
 			if(total > 0):
 				player_scores.append(player_data)
 		
