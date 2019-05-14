@@ -126,11 +126,11 @@ def standingstable():
 		sp += '<tr class="head"><th>Player</th>'
 		sp += ''.join(['<th>' + description(wk, True) +'</th>' for wk in csdc.weeks
 			])
-		sp +='<th>Runes</th><th>Gods</th><th>Speed</th>'
+		sp +='<th>Runes</th><th>Gods</th><th>Speed</th><th>Turns</th>'
 		sp += '<th>Score</th></tr>'
 		
 		player_scores = []
-				
+		
 		for p in csdc.overview().with_session(s).all():
 			player_data = [p.Player.name]
 			total = 0
@@ -152,7 +152,8 @@ def standingstable():
 			runes_bonus = 0
 			god_bonus = sum(god_bonus_list)
 			speed_bonus = 0
-			bonus_scores = [runes_bonus, god_bonus, speed_bonus]
+			turn_bonus = 0
+			bonus_scores = [runes_bonus, god_bonus, speed_bonus, turn_bonus]
 			bonus_strings = []
 			
 			for bonus in bonus_scores:
@@ -166,7 +167,7 @@ def standingstable():
 				player_scores.append(player_data)
 		
 		player_scores.sort(key=lambda x: x[-1], reverse=True)
-		bonus_types = 3
+		bonus_types = 4
 		
 		for player in player_scores:
 			week_n = len(csdc.weeks)
@@ -259,6 +260,7 @@ games achieve them.</p>
 <table class="info"><tr class="head" id="onetime"><th>One-time points (earned once in the
 competition)</th><th></th></tr>
 <tr><td class="name">collect the Orb of Zot in under 40 minutes: 25 points</td></tr>
+<tr><td class="name">enter Dis in under 40,000 turns: 20 points</td></tr>
 <tr><td class="name">10 points each for the following runes: slimy, silver, iron, icy, obsidian, bone</td></tr>
 <tr><td class="name">4 points for each of these gods you get your first rune while worshipping: Dithmenos, Fedhas, Nemelex, Wu Jian, Sif Muna, Uskayaw</td></tr>
 </table>

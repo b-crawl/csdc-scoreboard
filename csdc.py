@@ -137,6 +137,13 @@ class CsdcWeek:
 				Milestone.dur <= seconds, Milestone.verb_id == orb_verb
 			).exists()
 
+	def _turncount(self, name, turns):
+		with get_session() as s:
+			place = get_place_from_string(s, name)
+			return self._valid_milestone().filter(
+				Milestone.place_id == place.id, Milestone.turn <= turns
+			).exists()
+
 	def _XL(self, n):
 		return self._valid_milestone().filter(
 			Milestone.xl >= n
@@ -156,7 +163,7 @@ class CsdcWeek:
 			type_coerce(self._XL(12) * 12, Integer).label("xl"),
 			type_coerce(self._win() * 20, Integer).label("win"),
 			
-			type_coerce(self._realtime(7800) * 4, Integer).label("oka"),
+			type_coerce(self._turncount("Lair:1", 10000) * 5, Integer).label("oka"),
 		]).filter(Game.gid.in_(self.gids)).subquery()
 
 		return Query( [Player, Game]).select_from(Player).outerjoin(Game,
