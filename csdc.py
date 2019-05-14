@@ -163,7 +163,7 @@ class CsdcWeek:
 			type_coerce(self._XL(12) * 12, Integer).label("xl"),
 			type_coerce(self._win() * 20, Integer).label("win"),
 			
-			type_coerce(self._turncount("Lair:1", 10000) * 5, Integer).label("oka"),
+			type_coerce(self._turncount("Lair:1", 20000) * 5, Integer).label("oka"),
 		]).filter(Game.gid.in_(self.gids)).subquery()
 
 		return Query( [Player, Game]).select_from(Player).outerjoin(Game,

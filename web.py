@@ -259,7 +259,7 @@ games achieve them.</p>
 </table>
 <table class="info"><tr class="head" id="onetime"><th>One-time points (earned once in the
 competition)</th><th></th></tr>
-<tr><td class="name">collect the Orb of Zot in under 40 minutes: 25 points</td></tr>
+<tr><td class="name">collect the Orb of Zot in under 50 minutes: 25 points</td></tr>
 <tr><td class="name">enter Dis in under 40,000 turns: 20 points</td></tr>
 <tr><td class="name">10 points each for the following runes: slimy, silver, iron, icy, obsidian, bone</td></tr>
 <tr><td class="name">4 points for each of these gods you get your first rune while worshipping: Dithmenos, Fedhas, Nemelex, Wu Jian, Sif Muna, Uskayaw</td></tr>
