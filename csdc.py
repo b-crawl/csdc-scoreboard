@@ -127,9 +127,12 @@ class CsdcWeek:
 			).exists())
 
 	def _rune(self, name):
-		return self._valid_milestone().filter(
-			(Milestone.msg == "found a {} rune of Zot.".format(name))
-		).exists()
+		with get_session() as s:
+			place = get_place_from_string(s, name)
+			rune_verb = get_verb(s, "rune").id
+			return self._valid_milestone().filter(
+				Milestone.place_id == place.id, Milestone.verb_id == rune_verb
+			).exists()
 
 	def _XL(self, n):
 		return self._valid_milestone().filter(
@@ -150,7 +153,7 @@ class CsdcWeek:
 			type_coerce(self._XL(12) * 12, Integer).label("xl"),
 			type_coerce(self._win() * 20, Integer).label("win"),
 			
-			type_coerce(self._god("Okawaru") * 4, Integer).label("oka"),
+			type_coerce(self._rune("Swamp:3") * 4, Integer).label("oka"),
 		]).filter(Game.gid.in_(self.gids)).subquery()
 
 		return Query( [Player, Game]).select_from(Player).outerjoin(Game,
