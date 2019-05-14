@@ -116,15 +116,11 @@ class CsdcWeek:
 
 	def _god(self, name):
 		with get_session() as s:
-			worship_id = get_verb(s, "god.worship").id
-			champ_id = get_verb(s, "god.maxpiety").id
-			abandon_id = get_verb(s, "god.renounce").id
-			god = get_god(s, name)
-		return and_(
-			_champion_god(self._valid_milestone(), god),
-			~self._valid_milestone().filter(
-				Milestone.verb_id == abandon_id
-			).exists())
+			god_id = get_god(s, name).id
+			rune_verb = get_verb(s, "rune").id
+			return self._valid_milestone().filter(
+				Milestone.god_id == god_id, Milestone.verb_id == rune_verb, Milestone.runes == 1
+			).exists()
 
 	def _rune(self, name):
 		with get_session() as s:
@@ -153,7 +149,7 @@ class CsdcWeek:
 			type_coerce(self._XL(12) * 12, Integer).label("xl"),
 			type_coerce(self._win() * 20, Integer).label("win"),
 			
-			type_coerce(self._rune("Swamp:3") * 4, Integer).label("oka"),
+			type_coerce(self._god("Vehumet") * 4, Integer).label("oka"),
 		]).filter(Game.gid.in_(self.gids)).subquery()
 
 		return Query( [Player, Game]).select_from(Player).outerjoin(Game,
