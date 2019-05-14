@@ -168,10 +168,10 @@ class CsdcWeek:
 			
 			type_coerce(self._rune("Slime:5") * 10, Integer).label("slimy"),
 			type_coerce(self._rune("Vaults:3") * 10, Integer).label("silver"),
-			type_coerce(self._rune("Dis") * 10, Integer).label("iron"),
-			type_coerce(self._rune("Tar") * 10, Integer).label("bone"),
-			type_coerce(self._rune("Geh") * 10, Integer).label("obsidian"),
-			type_coerce(self._rune("Coc") * 10, Integer).label("icy"),
+			type_coerce(self._rune("Dis:2") * 10, Integer).label("iron"),
+			type_coerce(self._rune("Tar:2") * 10, Integer).label("bone"),
+			type_coerce(self._rune("Geh:2") * 10, Integer).label("obsidian"),
+			type_coerce(self._rune("Coc:2") * 10, Integer).label("icy"),
 			
 			type_coerce(self._god("Dithmenos") * 4, Integer).label("dith"),
 			type_coerce(self._god("Fedhas") * 4, Integer).label("fedhas"),
