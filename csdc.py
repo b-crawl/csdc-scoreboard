@@ -130,6 +130,13 @@ class CsdcWeek:
 				Milestone.place_id == place.id, Milestone.verb_id == rune_verb
 			).exists()
 
+	def _realtime(self, seconds):
+		with get_session() as s:
+			orb_verb = get_verb(s, "orb").id
+			return self._valid_milestone().filter(
+				Milestone.dur <= seconds, Milestone.verb_id == orb_verb
+			).exists()
+
 	def _XL(self, n):
 		return self._valid_milestone().filter(
 			Milestone.xl >= n
@@ -149,7 +156,7 @@ class CsdcWeek:
 			type_coerce(self._XL(12) * 12, Integer).label("xl"),
 			type_coerce(self._win() * 20, Integer).label("win"),
 			
-			type_coerce(self._god("Vehumet") * 4, Integer).label("oka"),
+			type_coerce(self._realtime(7800) * 4, Integer).label("oka"),
 		]).filter(Game.gid.in_(self.gids)).subquery()
 
 		return Query( [Player, Game]).select_from(Player).outerjoin(Game,
