@@ -135,8 +135,14 @@ def standingstable():
 			player_data = [p.Player.name]
 			total = 0
 			
-			bonus_gods = ["oka"]
-			god_bonus_list = [0 * len(bonus_gods)]
+			bonus_gods = ["dith", "fedhas", "nemelex", "wu", "sif", "usk"]
+			god_bonus_list = [0] * len(bonus_gods)
+			
+			bonus_runes = ["slimy", "silver", "iron", "bone", "obsidian", "icy"]
+			rune_bonus_list = [0] * len(bonus_runes)
+			
+			speed_bonus = 0
+			turn_bonus = 0
 			
 			for wk in csdc.weeks:
 				wk_n = "wk" + wk.number
@@ -146,13 +152,21 @@ def standingstable():
 				player_data.append(week_score)
 				
 				for i in range(len(bonus_gods)):
-					wk_points = week_score = _ifnone(getattr(p, wk_n + bonus_gods[i]), "0")
+					wk_points = _ifnone(getattr(p, wk_n + bonus_gods[i]), "0")
 					god_bonus_list[i] = max(god_bonus_list[i], int(wk_points))
 			
-			runes_bonus = 0
+				for i in range(len(bonus_runes)):
+					wk_points = _ifnone(getattr(p, wk_n + bonus_runes[i]), "0")
+					rune_bonus_list[i] = max(rune_bonus_list[i], int(wk_points))
+				
+				wk_speed_points = _ifnone(getattr(p, wk_n + "time"), "0")
+				speed_bonus = max(int(wk_speed_points), speed_bonus)
+				wk_turn_points = _ifnone(getattr(p, wk_n + "turns"), "0")
+				turn_bonus = max(int(wk_turn_points), turn_bonus)
+			
+			runes_bonus = sum(rune_bonus_list)
 			god_bonus = sum(god_bonus_list)
-			speed_bonus = 0
-			turn_bonus = 0
+			
 			bonus_scores = [runes_bonus, god_bonus, speed_bonus, turn_bonus]
 			bonus_strings = []
 			

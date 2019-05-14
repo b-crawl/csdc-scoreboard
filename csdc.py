@@ -163,7 +163,22 @@ class CsdcWeek:
 			type_coerce(self._XL(12) * 12, Integer).label("xl"),
 			type_coerce(self._win() * 20, Integer).label("win"),
 			
-			type_coerce(self._turncount("Lair:1", 20000) * 5, Integer).label("oka"),
+			type_coerce(self._realtime(3000) * 25, Integer).label("time"),
+			type_coerce(self._turncount("Dis:1", 40000) * 20, Integer).label("turns"),
+			
+			type_coerce(self._rune("Slime:5") * 10, Integer).label("slimy"),
+			type_coerce(self._rune("Vaults:3") * 10, Integer).label("silver"),
+			type_coerce(self._rune("Dis") * 10, Integer).label("iron"),
+			type_coerce(self._rune("Tar") * 10, Integer).label("bone"),
+			type_coerce(self._rune("Geh") * 10, Integer).label("obsidian"),
+			type_coerce(self._rune("Coc") * 10, Integer).label("icy"),
+			
+			type_coerce(self._god("Dithmenos") * 4, Integer).label("dith"),
+			type_coerce(self._god("Fedhas") * 4, Integer).label("fedhas"),
+			type_coerce(self._god("Nemelex Xobeh") * 4, Integer).label("nemelex"),
+			type_coerce(self._god("Wu Jian") * 4, Integer).label("wu"),
+			type_coerce(self._god("Sif Muna") * 4, Integer).label("sif"),
+			type_coerce(self._god("Uskayaw") * 4, Integer).label("usk"),
 		]).filter(Game.gid.in_(self.gids)).subquery()
 
 		return Query( [Player, Game]).select_from(Player).outerjoin(Game,
@@ -171,7 +186,22 @@ class CsdcWeek:
 					sc.c.xl,
 					sc.c.win,
 					
-					sc.c.oka,
+					sc.c.time,
+					sc.c.turns,
+					
+					sc.c.slimy,
+					sc.c.silver,
+					sc.c.iron,
+					sc.c.bone,
+					sc.c.obsidian,
+					sc.c.icy,
+					
+					sc.c.dith,
+					sc.c.fedhas,
+					sc.c.nemelex,
+					sc.c.wu,
+					sc.c.sif,
+					sc.c.usk,
 					
 					func.max(sc.c.xl + sc.c.win).label("total")
 			).group_by(sc.c.player_id).order_by(desc("total"),Game.start)
@@ -248,7 +278,7 @@ def overview():
 	for wk in weeks:
 		wk_n = "wk" + wk.number
 		a = wk.scorecard().subquery()
-		q = q.outerjoin(a, Player.id == a.c.player_id).add_column(a.c.total.label(wk_n)).add_column(a.c.oka.label(wk_n + "oka"))
+		q = q.outerjoin(a, Player.id == a.c.player_id).add_column(a.c.total.label(wk_n)).add_column(a.c.time.label(wk_n + "time")).add_column(a.c.turns.label(wk_n + "turns")).add_column(a.c.slimy.label(wk_n + "slimy")).add_column(a.c.silver.label(wk_n + "silver")).add_column(a.c.iron.label(wk_n + "iron")).add_column(a.c.bone.label(wk_n + "bone")).add_column(a.c.obsidian.label(wk_n + "obsidian")).add_column(a.c.icy.label(wk_n + "icy")).add_column(a.c.dith.label(wk_n + "dith")).add_column(a.c.fedhas.label(wk_n + "fedhas")).add_column(a.c.nemelex.label(wk_n + "nemelex")).add_column(a.c.wu.label(wk_n + "wu")).add_column(a.c.sif.label(wk_n + "sif")).add_column(a.c.usk.label(wk_n + "usk"))
 
 	return q
 
