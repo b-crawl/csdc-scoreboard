@@ -260,7 +260,7 @@ games achieve them.</p>
 competition)</th><th></th></tr>
 <tr><td class="name">1000/(fastest realtime win in minutes) points</td></tr>
 <tr><td class="name">10 points each for the following runes: slimy, silver, iron, icy, obsidian, bone</td></tr>
-<tr><td class="name">4 points for each of these gods you reach ****** piety with: Dithmenos, Fedhas, Nemelex, Wu Jian, Sif Muna, Uskayaw</td></tr>
+<tr><td class="name">4 points for each of these gods you get your first rune while worshipping: Dithmenos, Fedhas, Nemelex, Wu Jian, Sif Muna, Uskayaw</td></tr>
 </table>
 
 <h2>Fair Crawling</h2>
