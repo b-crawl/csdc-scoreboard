@@ -86,6 +86,7 @@ def scoretable(wk, div):
 	<th>Player</th>
 	<th>Reach XL12</th>
 	<th>Win</th>
+	<th>Runes</th><th>Gods</th><th>Speed</th><th>Turns</th>
 	<th>Total</th>
 	</tr>""")
 
@@ -97,16 +98,30 @@ def scoretable(wk, div):
 						"none", g.Player.name)
 				continue
 
+			bonus_gods = ["veh", "chei", "dith", "fedhas", "nemelex", "wu", "sif", "usk"]
+			god_total = 0
+			
+			bonus_runes = ["slimy", "silver", "iron", "bone", "obsidian", "icy"]
+			rune_total = 0
+			
+			for i in range(len(bonus_gods)):
+				god_total += int(_ifnone(getattr(g, bonus_gods[i]), "0"))
+		
+			for i in range(len(bonus_runes)):
+				rune_total += int(_ifnone(getattr(g, bonus_runes[i]), "0"))
+			
 			sp += ('<tr class="{}">'.format(
 				"won" if g.Game.won and g.Game.end <= wk.end else
 				"alive" if g.Game.alive else
 				"dead"))
 			sp += ('<td class="name"><a href="{}">{}</a></td>'.format(
 				morgue_url(g.Game), g.Game.player.name))
-			sp += ( (('<td class="pt">{}</td>' * 2) 
+			sp += ( (('<td class="pt">{}</td>' * 6) 
 				+ '<td class="total">{}</td>').format(
 				g.xl,
 				g.win,
+				str(rune_total), str(god_total),
+				g.time, g.turns,
 				g.total))
 			sp += ('</tr>\n')
 
@@ -135,7 +150,7 @@ def standingstable():
 			player_data = [p.Player.name]
 			total = 0
 			
-			bonus_gods = ["dith", "fedhas", "nemelex", "wu", "sif", "usk"]
+			bonus_gods = ["veh", "chei", "dith", "fedhas", "nemelex", "wu", "sif", "usk"]
 			god_bonus_list = [0] * len(bonus_gods)
 			
 			bonus_runes = ["slimy", "silver", "iron", "bone", "obsidian", "icy"]
