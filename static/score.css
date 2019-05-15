@@ -125,10 +125,10 @@ tr.won:nth-child(even) {
   background-color: #002A00;
 }
 tr.dead {
-  background-color: #711;
+  background-color: #4E2D41;
 }
 tr.dead:nth-child(even) {
-  background-color: #450000;
+  background-color: #3C162D;
 }
 tr.alive {background-color: #383338}
 tr.alive:nth-child(even) {background-color: #1F1A1F;}
