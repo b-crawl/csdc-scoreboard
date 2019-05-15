@@ -239,7 +239,7 @@ Yermak, Manman, Dynast, and Ultraviolent4 come into view.</pre>
 
 <ul>
 <li>8 interesting combos to play have been selected for this competition.</li>
-<li>They can be played in any order.</li>
+<li>Each combo has a 12 day window to play it. These combo times overlap.</li>
 <li>You get <em>one</em> attempt to play each combo.</li>
 <li>The goal is to advance as far as possible (and win!) in each game, scoring
 points by reaching various in-game milestones.</li>
@@ -274,10 +274,9 @@ logo design: <a href="https://www.youtube.com/channel/UCzmCTHcYFM5nnAPBYE26Fng">
 def rulespage():
 	pagestr ="""
 	<ol>
-<li>Each challenge consists of playing a specific race/class
-combo (e.g. MiBe). Only milestones recorded during the tournament period will count for scoring.</li>
-<li>Your first game of each combo that's started on an official server during the tournament period will count
+<li>Your first game of each tournament combo that's started on an official server during that combo's time window will count
 for scoring. This is the only allowed attempt.</li>
+<li>Only milestones recorded during that combo's time window will count for scoring.</li>
 </ol>
 
 <h2>Scoring</h2>
@@ -295,7 +294,7 @@ competition)</th><th></th></tr>
 <tr><td class="name">collect the Orb of Zot in under 50 minutes: 25 points</td></tr>
 <tr><td class="name">enter Dis in under 40,000 turns: 20 points</td></tr>
 <tr><td class="name">10 points each for the following runes: slimy, silver, iron, icy, obsidian, bone</td></tr>
-<tr><td class="name">4 points for each of these gods you get your first rune while worshipping: Dithmenos, Fedhas, Nemelex, Wu Jian, Sif Muna, Uskayaw</td></tr>
+<tr><td class="name">4 points for each of these gods you get your first rune while worshipping: Cheibriados, Vehumet, Dithmenos, Fedhas, Nemelex, Wu Jian, Sif Muna, Uskayaw</td></tr>
 </table>
 
 <h2>Fair Crawling</h2>
