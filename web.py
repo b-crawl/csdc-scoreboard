@@ -65,12 +65,7 @@ def wkurl(wk):
 
 
 def description(wk, url):
-	s = ""
-
-	if wk.start > datetime.datetime.now():
-		s += "Character {0}"
-	else:
-		s += "Character {0}&mdash;{1}{2}"
+	s = "Character {0}&mdash;{1}{2}"
 
 	if url and wk.start <= datetime.datetime.now():
 		s = wkurl(wk).format(s)
