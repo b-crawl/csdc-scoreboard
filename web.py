@@ -138,7 +138,7 @@ def _ifnone(x, d):
 def standingstable():
 	with get_session() as s:
 		sp = "<table>"
-		sp += '<tr class="head"><th>Player</th>'
+		sp += '<tr class="head"><th></th><th>Player</th>'
 		sp += ''.join(['<th>' + description(wk, True) +'</th>' for wk in csdc.weeks
 			])
 		sp +='<th>Runes</th><th>Gods</th><th>Speed</th><th>Turns</th>'
@@ -198,10 +198,14 @@ def standingstable():
 		player_scores.sort(key=lambda x: x[-1], reverse=True)
 		bonus_types = 4
 		
+		rank = 1
 		for player in player_scores:
 			week_n = len(csdc.weeks)
-			line = '<tr>' + '<td class="name">{}</td>' + ('<td class="pt">{}</td>' * week_n) + ('<td class="pt">{}</td>' * bonus_types) + '<td class="total">{}</td>' + '</tr>'
-			sp += line.format(*player)
+			line1 = '<tr>' + '<td class="rank">{}</td>'
+			rank_text = str(rank) + "."
+			rank += 1
+			line2 = '<td class="name">{}</td>' + ('<td class="pt">{}</td>' * week_n) + ('<td class="pt">{}</td>' * bonus_types) + '<td class="total">{}</td>' + '</tr>'
+			sp += line1.format(rank_text) + line2.format(*player)
 		
 		return sp
 
