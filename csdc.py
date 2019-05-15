@@ -224,29 +224,29 @@ def initialize_weeks():
 		
 		weeks.append(CsdcWeek(
 			number = "1",
-			species = "Mi",
-			background = "SA",
-			gods = (),
-			start = start_date,
-			end = end_date))
-		weeks.append(CsdcWeek(
-			number = "2",
 			species = "Dg",
 			background = "Gl",
 			gods = (),
 			start = start_date,
 			end = end_date))
 		weeks.append(CsdcWeek(
+			number = "2",
+			species = "Mi",
+			background = "SA",
+			gods = (),
+			start = start_date,
+			end = end_date))
+		weeks.append(CsdcWeek(
 			number = "3",
-			species = "Fe",
-			background = "Mo",
+			species = "Vp",
+			background = "Rg",
 			gods = (),
 			start = start_date,
 			end = end_date))
 		weeks.append(CsdcWeek(
 			number = "4",
-			species = "Vp",
-			background = "Rg",
+			species = "Fe",
+			background = "Mo",
 			gods = (),
 			start = start_date,
 			end = end_date))
@@ -266,15 +266,15 @@ def initialize_weeks():
 			end = end_date))
 		weeks.append(CsdcWeek(
 			number = "7",
-			species = "Av",
-			background = "Re",
+			species = "Na",
+			background = "VM",
 			gods = (),
 			start = start_date,
 			end = end_date))
 		weeks.append(CsdcWeek(
 			number = "8",
-			species = "Na",
-			background = "VM",
+			species = "Av",
+			background = "Re",
 			gods = (),
 			start = start_date,
 			end = end_date))
