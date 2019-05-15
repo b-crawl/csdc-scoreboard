@@ -219,65 +219,62 @@ weeks = []
 def initialize_weeks():
 	with get_session() as s:
 		
-		start_date = datetime.datetime(2018,10,4)
-		end_date = datetime.datetime(2019,10,11)
-		
 		weeks.append(CsdcWeek(
 			number = "1",
 			species = "Dg",
 			background = "Gl",
 			gods = (),
-			start = start_date,
-			end = end_date))
+			start = datetime.datetime(2019,6,7),
+			end = datetime.datetime(2019,6,19)))
 		weeks.append(CsdcWeek(
 			number = "2",
 			species = "Mi",
 			background = "SA",
 			gods = (),
-			start = start_date,
-			end = end_date))
+			start = datetime.datetime(2019,6,10),
+			end = datetime.datetime(2019,6,22)))
 		weeks.append(CsdcWeek(
 			number = "3",
 			species = "Vp",
 			background = "Rg",
 			gods = (),
-			start = start_date,
-			end = end_date))
+			start = datetime.datetime(2019,6,13),
+			end = datetime.datetime(2019,6,25)))
 		weeks.append(CsdcWeek(
 			number = "4",
 			species = "Fe",
 			background = "Mo",
 			gods = (),
-			start = start_date,
-			end = end_date))
+			start = datetime.datetime(2019,6,16),
+			end = datetime.datetime(2019,6,28)))
 		weeks.append(CsdcWeek(
 			number = "5",
 			species = "SD",
 			background = "Sk",
 			gods = (),
-			start = start_date,
-			end = end_date))
+			start = datetime.datetime(2019,6,19),
+			end = datetime.datetime(2019,7,1)))
 		weeks.append(CsdcWeek(
 			number = "6",
 			species = "Fo",
 			background = "AM",
 			gods = (),
-			start = start_date,
-			end = end_date))
+			start = datetime.datetime(2019,6,22),
+			end = datetime.datetime(2019,7,4)))
 		weeks.append(CsdcWeek(
 			number = "7",
 			species = "Na",
 			background = "VM",
 			gods = (),
-			start = start_date,
-			end = end_date))
+			start = datetime.datetime(2019,6,25),
+			end = datetime.datetime(2019,7,7)))
 		weeks.append(CsdcWeek(
 			number = "8",
 			species = "Av",
 			background = "Re",
 			gods = (),
-			start = start_date,
-			end = end_date))
+			start = datetime.datetime(2019,6,28),
+			end = datetime.datetime(2019,7,10)))
 
 
 def overview():

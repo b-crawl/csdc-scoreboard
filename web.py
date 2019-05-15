@@ -272,6 +272,7 @@ def rulespage():
 <li>Your first game of each tournament combo that's started on an official server during that combo's time window will count
 for scoring. This is the only allowed attempt.</li>
 <li>Only milestones recorded during that combo's time window will count for scoring.</li>
+<li>If you want to compete in a team, make a shared account for your team that starts with "Team" or "team".</li>
 </ol>
 
 <h2>Scoring</h2>
