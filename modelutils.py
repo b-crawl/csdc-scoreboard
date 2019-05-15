@@ -56,6 +56,8 @@ def _morgue_prefix(src: str, version: str) -> Optional[str]:
     src = src.lower()
     if src == "cao":
         prefix = "http://crawl.akrasiac.org/rawdata"
+    elif src == "cko":
+        prefix = "https://crawl.kelbi.org/crawl/morgue"
     elif src == "cdo":
         prefix = "http://crawl.develz.org/morgues"
         prefix += "/" + version_url(version)
@@ -75,7 +77,7 @@ def _morgue_prefix(src: str, version: str) -> Optional[str]:
     elif src == "cwz":
         prefix = "http://webzook.net/soup/morgue/"
         prefix += "/" + version_url(version)
-    elif src in ("cko"):
+    elif src in (""):
         return None
     else:
         raise ValueError("No prefix for %s" % src)

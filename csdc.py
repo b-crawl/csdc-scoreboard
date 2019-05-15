@@ -219,7 +219,7 @@ weeks = []
 def initialize_weeks():
 	with get_session() as s:
 		
-		start_date = datetime.datetime(2019,10,4)
+		start_date = datetime.datetime(2018,10,4)
 		end_date = datetime.datetime(2019,10,11)
 		
 		weeks.append(CsdcWeek(
