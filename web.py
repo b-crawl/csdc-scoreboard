@@ -227,7 +227,7 @@ def overviewpage():
 	<pre id="cover">
 Near the exit of the stairs, a rune flashes!
 You find yourself in a tournament!
-Yermak, Manman, Dynast, and Ultraviolent4 come into view.</pre>
+Yermak, Manman, Dynast, and NormalPerson7 come into view.</pre>
 <br><br>
 
 <h2>Competition Format</h2>
@@ -238,8 +238,8 @@ Yermak, Manman, Dynast, and Ultraviolent4 come into view.</pre>
 <li>You get <em>one</em> attempt to play each combo.</li>
 <li>The goal is to advance as far as possible (and win!) in each game, scoring
 points by reaching various in-game milestones.</li>
-<li>Details on rules and scoring are available on the <a
-href="rules.html">rules page</a>.</li>
+<li>Details on rules and scoring are available on the <a href="rules.html">rules page</a>.</li>
+<li>For some important differences between bcrawl and DCSS, see <a href="changes.html">here</a>.</li>
 </ul>
 
 <h2>Tournament Combos</h2>
@@ -272,7 +272,7 @@ def rulespage():
 <li>Your first game of each tournament combo that's started on an official server during that combo's time window will count
 for scoring. This is the only allowed attempt.</li>
 <li>Only milestones recorded during that combo's time window will count for scoring.</li>
-<li>If you want to compete in a team, make a shared account for your team that starts with "Team" or "team".</li>
+<li>If you want to compete in a team, make a shared account for your team that includes "Team" or "team" in the username.</li>
 </ol>
 
 <h2>Scoring</h2>
