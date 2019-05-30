@@ -9,3 +9,12 @@ sources:
     base: https://crawl.kelbi.org
     logfile: 'crawl/meta/bcrawl/logfile'
     milestones: 'crawl/meta/bcrawl/milestones'
+
+  - name: cue
+    aliases:
+      - cln
+      - clan
+    base: http://underhound.eu/crawl/meta
+    logfile: 'bcrawl/logfile'
+    milestones: 'bcrawl/milestones'
+

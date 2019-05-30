@@ -233,11 +233,14 @@ Yermak, Manman, Dynast, and NormalPerson7 come into view.</pre>
 <h2>Competition Format</h2>
 
 <ul>
-<li>8 interesting combos to play have been selected for this competition.</li>
+<li>8 combos to play that show off new content in bcrawl have been selected for this competition.</li>
 <li>Each combo has a 12 day window to play it. These combo times overlap.</li>
 <li>You get <em>one</em> attempt to play each combo.</li>
 <li>The goal is to advance as far as possible (and win!) in each game, scoring
 points by reaching various in-game milestones.</li>
+</ul>
+<h2>More Info</h2>
+<ul>
 <li>Details on rules and scoring are available on the <a href="rules.html">rules page</a>.</li>
 <li>For some important differences between bcrawl and DCSS, see <a href="changes.html">here</a>.</li>
 </ul>
@@ -248,7 +251,7 @@ points by reaching various in-game milestones.</li>
 
 <h2>How to Participate</h2>
 
-<p>To participate, just play bcrawl online on <a href="https://crawl.develz.org/play.htm">CKO (New York)</a> or <a href="https://crawl.develz.org/play.htm">CPO (Australia)</a> during the tournament period.</p>
+<p>To participate, just play bcrawl online on <a href="https://crawl.kelbi.org/">CKO (New York)</a>, <a href="https://underhound.eu:8080">CUE (Netherlands)</a>, or <a href="https://crawl.project357.org/">CPO (Australia)</a> during the tournament period.</p>
 
 <h2>Credits</h2>
 <p>hosting, rules: bhauth<br>
