@@ -193,12 +193,20 @@ def standingstable():
 		player_scores.sort(key=lambda x: x[-1], reverse=True)
 		bonus_types = 4
 		
-		rank = 1
+		rank = 0
+		last_score_total = -1
+		tie_rank = -1
 		for player in player_scores:
 			week_n = len(csdc.weeks)
+			
 			line1 = '<tr>' + '<td class="rank">{}</td>'
-			rank_text = str(rank) + "."
 			rank += 1
+			player_score = player[-1]
+			if player_score != last_score_total:
+				tie_rank = rank
+				last_score_total = player_score
+			rank_text = str(tie_rank) + "."
+			
 			line2 = '<td class="name">{}</td>' + ('<td class="pt">{}</td>' * week_n) + ('<td class="pt">{}</td>' * bonus_types) + '<td class="total">{}</td>' + '</tr>'
 			sp += line1.format(rank_text) + line2.format(*player)
 		
