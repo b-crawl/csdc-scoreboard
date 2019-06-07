@@ -64,7 +64,7 @@ def _morgue_prefix(src: str, version: str) -> Optional[str]:
     elif src == "cszo":
         prefix = "http://dobrazupa.org/morgue"
     elif src == "cue" or src == "clan":
-        prefix = "http://underhound.eu:81/crawl/morgue"
+        prefix = "http://underhound.eu/crawl/morgue"
     elif src == "cbro":
         prefix = "http://crawl.berotato.org/crawl/morgue"
     elif src == "cxc":
