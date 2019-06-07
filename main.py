@@ -28,7 +28,7 @@ if __name__=='__main__':
 	refresh.refresh(CONFIG['sources file'], SOURCES_DIR)
 	csdc.initialize_weeks()
 	t_i = time.time()
-	now = datetime.datetime.now()
+	now = datetime.datetime.utcnow()
 	oldmask = os.umask(18)
 	for wk in csdc.weeks:
 		if wk.start > now:

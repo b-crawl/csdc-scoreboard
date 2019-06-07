@@ -42,7 +42,7 @@ def wkmenu(wk):
 		menuitem = ""
 		if ((wk is None or 
 			w.number != wk.number)
-			and w.start <= datetime.datetime.now()):
+			and w.start <= datetime.datetime.utcnow()):
 			menuitem += wkurl(w)
 		else:
 			menuitem += '{}'
@@ -67,7 +67,7 @@ def wkurl(wk):
 def description(wk, url):
 	s = "Character {0}&mdash;{1}{2}"
 
-	if url and wk.start <= datetime.datetime.now():
+	if url and wk.start <= datetime.datetime.utcnow():
 		s = wkurl(wk).format(s)
 
 	return s.format(wk.number, wk.species.short,
