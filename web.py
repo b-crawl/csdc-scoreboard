@@ -314,7 +314,7 @@ competition)</th><th></th></tr>
 
 def page(**kwargs):
 	"""static, title, subhead, content"""
-	return """<html>{}<body>{}<div id="content">{}</div>
+	return """<html>{}<body>{}<div id="content">{}</div><br><br>
 	<div id="bottomtext">{}</div></body></html>""".format(
 			head(kwargs["static"],kwargs.get("title",kwargs.get("subhead",""))),
 			logoblock(kwargs.get("subhead","")),
