@@ -79,7 +79,7 @@ def scoretable(wk, div):
 	sp = ""
 	sp += ("""<table><tr class="head">
 	<th>Player</th>
-	<th>Reach XL12</th>
+	<th>Reach XL10</th>
 	<th>Win</th>
 	<th>Runes</th><th>Gods</th><th>Speed</th><th>Turns</th>
 	<th>Total</th>
