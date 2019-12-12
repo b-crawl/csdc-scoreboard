@@ -35,6 +35,7 @@ SPECIES = {
     Species("Na", "Naga"),
     Species("Op", "Octopode"),
     Species("Og", "Ogre"),
+    Species("Sk", "Skeleton"),
     Species("Sp", "Spriggan"),
     Species("Te", "Tengu"),
     Species("Tr", "Troll"),

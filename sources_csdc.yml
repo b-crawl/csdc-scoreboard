@@ -18,3 +18,7 @@ sources:
     logfile: 'bcrawl/logfile'
     milestones: 'bcrawl/milestones'
 
+  - name: cxc
+    base: http://crawl.xtahua.com/crawl/meta
+    logfile: 'bcrawl/logfile'
+    milestones: 'bcrawl/milestones'

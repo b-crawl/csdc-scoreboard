@@ -160,11 +160,11 @@ class CsdcWeek:
 	def scorecard(self):
 		sc = Query([Game.gid,
 			Game.player_id,
-			type_coerce(self._XL(12) * 12, Integer).label("xl"),
-			type_coerce(self._win() * 20, Integer).label("win"),
+			type_coerce(self._XL(10) * 10, Integer).label("xl"),
+			type_coerce(self._win() * 15, Integer).label("win"),
 			
-			type_coerce(self._realtime(3000) * 25, Integer).label("time"),
-			type_coerce(self._turncount("Dis:1", 40000) * 20, Integer).label("turns"),
+			type_coerce(self._realtime(6000) * 20, Integer).label("time"),
+			type_coerce(self._turncount("Dis:1", 30000) * 20, Integer).label("turns"),
 			
 			type_coerce(self._rune("Slime:5") * 10, Integer).label("slimy"),
 			type_coerce(self._rune("Vaults:3") * 10, Integer).label("silver"),
@@ -172,15 +172,12 @@ class CsdcWeek:
 			type_coerce(self._rune("Tar:2") * 10, Integer).label("bone"),
 			type_coerce(self._rune("Geh:2") * 10, Integer).label("obsidian"),
 			type_coerce(self._rune("Coc:2") * 10, Integer).label("icy"),
+			type_coerce(self._rune("Pan") * 20, Integer).label("pan"),
 			
-			type_coerce(self._god("Vehumet") * 4, Integer).label("veh"),
-			type_coerce(self._god("Cheibriados") * 4, Integer).label("chei"),
-			type_coerce(self._god("Dithmenos") * 4, Integer).label("dith"),
-			type_coerce(self._god("Fedhas") * 4, Integer).label("fedhas"),
-			type_coerce(self._god("Nemelex Xobeh") * 4, Integer).label("nemelex"),
-			type_coerce(self._god("Wu Jian") * 4, Integer).label("wu"),
-			type_coerce(self._god("Sif Muna") * 4, Integer).label("sif"),
-			type_coerce(self._god("Uskayaw") * 4, Integer).label("usk"),
+			type_coerce(self._god("Qazlal") * 6, Integer).label("qaz"),
+			type_coerce(self._god("Jiyva") * 6, Integer).label("jiyva"),
+			type_coerce(self._god("Lugonu") * 6, Integer).label("lucy"),
+			type_coerce(self._god("Cheibriados") * 6, Integer).label("chei"),
 		]).filter(Game.gid.in_(self.gids)).subquery()
 
 		return Query( [Player, Game]).select_from(Player).outerjoin(Game,
@@ -197,21 +194,18 @@ class CsdcWeek:
 					sc.c.bone,
 					sc.c.obsidian,
 					sc.c.icy,
+					sc.c.pan,
 					
-					sc.c.veh,
+					sc.c.qaz,
 					sc.c.chei,
-					sc.c.dith,
-					sc.c.fedhas,
-					sc.c.nemelex,
-					sc.c.wu,
-					sc.c.sif,
-					sc.c.usk,
+					sc.c.lucy,
+					sc.c.jiyva,
 					
 					func.max(sc.c.xl + sc.c.win).label("subtotal"),
 					func.max(sc.c.xl + sc.c.win + 
 					sc.c.time + sc.c.turns + 
-					sc.c.slimy + sc.c.silver + sc.c.iron + sc.c.bone + sc.c.obsidian + sc.c.icy + 
-					sc.c.veh + sc.c.chei + sc.c.dith + sc.c.fedhas + sc.c.nemelex + sc.c.wu + sc.c.sif + sc.c.usk).label("total")
+					sc.c.slimy + sc.c.silver + sc.c.iron + sc.c.bone + sc.c.obsidian + sc.c.icy + sc.c.pan + 
+					sc.c.qaz + sc.c.chei + sc.c.lucy + sc.c.jiyva).label("total")
 			).group_by(sc.c.player_id).order_by(desc("total"),Game.start)
 
 weeks = []
@@ -221,60 +215,46 @@ def initialize_weeks():
 		
 		weeks.append(CsdcWeek(
 			number = "1",
-			species = "Dg",
-			background = "Gl",
+			species = "Sk",
+			background = "AK",
 			gods = (),
-			start = datetime.datetime(2019,6,7),
-			end = datetime.datetime(2019,6,19)))
+			start = datetime.datetime(2019,12,20),
+			end = datetime.datetime(2019,12,29)))
 		weeks.append(CsdcWeek(
 			number = "2",
-			species = "Mi",
-			background = "SA",
+			species = "On",
+			background = "VM",
 			gods = (),
-			start = datetime.datetime(2019,6,10),
-			end = datetime.datetime(2019,6,22)))
+			start = datetime.datetime(2019,12,23),
+			end = datetime.datetime(2020,1,1)))
 		weeks.append(CsdcWeek(
 			number = "3",
-			species = "Vp",
+			species = "Vs",
 			background = "Rg",
 			gods = (),
-			start = datetime.datetime(2019,6,13),
-			end = datetime.datetime(2019,6,25)))
+			start = datetime.datetime(2019,12,26),
+			end = datetime.datetime(2020,1,4)))
 		weeks.append(CsdcWeek(
 			number = "4",
-			species = "Fe",
-			background = "Mo",
+			species = "Dj",
+			background = "Cj",
 			gods = (),
-			start = datetime.datetime(2019,6,16),
-			end = datetime.datetime(2019,6,29)))
+			start = datetime.datetime(2019,12,29),
+			end = datetime.datetime(2020,1,7)))
 		weeks.append(CsdcWeek(
 			number = "5",
 			species = "SD",
-			background = "Sk",
+			background = "SA",
 			gods = (),
-			start = datetime.datetime(2019,6,19),
-			end = datetime.datetime(2019,7,1)))
+			start = datetime.datetime(2020,1,1),
+			end = datetime.datetime(2020,1,10)))
 		weeks.append(CsdcWeek(
 			number = "6",
-			species = "Fo",
-			background = "AM",
+			species = "Hu",
+			background = "Wz",
 			gods = (),
-			start = datetime.datetime(2019,6,22),
-			end = datetime.datetime(2019,7,4)))
-		weeks.append(CsdcWeek(
-			number = "7",
-			species = "Na",
-			background = "VM",
-			gods = (),
-			start = datetime.datetime(2019,6,25),
-			end = datetime.datetime(2019,7,7)))
-		weeks.append(CsdcWeek(
-			number = "8",
-			species = "Av",
-			background = "Re",
-			gods = (),
-			start = datetime.datetime(2019,6,28),
-			end = datetime.datetime(2019,7,10)))
+			start = datetime.datetime(2020,1,4),
+			end = datetime.datetime(2020,1,13)))
 
 
 def overview():
@@ -283,7 +263,7 @@ def overview():
 	for wk in weeks:
 		wk_n = "wk" + wk.number
 		a = wk.scorecard().subquery()
-		q = q.outerjoin(a, Player.id == a.c.player_id).add_column(a.c.subtotal.label(wk_n)).add_column(a.c.time.label(wk_n + "time")).add_column(a.c.turns.label(wk_n + "turns")).add_column(a.c.slimy.label(wk_n + "slimy")).add_column(a.c.silver.label(wk_n + "silver")).add_column(a.c.iron.label(wk_n + "iron")).add_column(a.c.bone.label(wk_n + "bone")).add_column(a.c.obsidian.label(wk_n + "obsidian")).add_column(a.c.icy.label(wk_n + "icy")).add_column(a.c.veh.label(wk_n + "veh")).add_column(a.c.chei.label(wk_n + "chei")).add_column(a.c.dith.label(wk_n + "dith")).add_column(a.c.fedhas.label(wk_n + "fedhas")).add_column(a.c.nemelex.label(wk_n + "nemelex")).add_column(a.c.wu.label(wk_n + "wu")).add_column(a.c.sif.label(wk_n + "sif")).add_column(a.c.usk.label(wk_n + "usk"))
+		q = q.outerjoin(a, Player.id == a.c.player_id).add_column(a.c.subtotal.label(wk_n)).add_column(a.c.time.label(wk_n + "time")).add_column(a.c.turns.label(wk_n + "turns")).add_column(a.c.slimy.label(wk_n + "slimy")).add_column(a.c.silver.label(wk_n + "silver")).add_column(a.c.iron.label(wk_n + "iron")).add_column(a.c.bone.label(wk_n + "bone")).add_column(a.c.obsidian.label(wk_n + "obsidian")).add_column(a.c.icy.label(wk_n + "icy")).add_column(a.c.pan.label(wk_n + "pan")).add_column(a.c.qaz.label(wk_n + "qaz")).add_column(a.c.chei.label(wk_n + "chei")).add_column(a.c.lucy.label(wk_n + "lucy")).add_column(a.c.jiyva.label(wk_n + "jiyva"))
 
 	return q
 

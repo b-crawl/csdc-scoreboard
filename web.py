@@ -19,7 +19,7 @@ def head(static, title):
 	{1}</head>""".format(title, refresh)
 
 
-version = '1.12'
+version = '1.19'
 
 def logoblock(subhead):
 	sh = "<h2>{}</h2>".format(subhead) if subhead != None else ""
@@ -93,10 +93,10 @@ def scoretable(wk, div):
 						"none", g.Player.name)
 				continue
 
-			bonus_gods = ["veh", "chei", "dith", "fedhas", "nemelex", "wu", "sif", "usk"]
+			bonus_gods = ["lucy", "chei", "qaz", "jiyva"]
 			god_total = 0
 			
-			bonus_runes = ["slimy", "silver", "iron", "bone", "obsidian", "icy"]
+			bonus_runes = ["slimy", "silver", "iron", "bone", "obsidian", "icy", "pan"]
 			rune_total = 0
 			
 			for i in range(len(bonus_gods)):
@@ -145,10 +145,10 @@ def standingstable():
 			player_data = [p.Player.name]
 			total = 0
 			
-			bonus_gods = ["veh", "chei", "dith", "fedhas", "nemelex", "wu", "sif", "usk"]
+			bonus_gods = ["lucy", "chei", "qaz", "jiyva"]
 			god_bonus_list = [0] * len(bonus_gods)
 			
-			bonus_runes = ["slimy", "silver", "iron", "bone", "obsidian", "icy"]
+			bonus_runes = ["slimy", "silver", "iron", "bone", "obsidian", "icy", "pan"]
 			rune_bonus_list = [0] * len(bonus_runes)
 			
 			speed_bonus = 0
@@ -293,20 +293,21 @@ played, and one-time points awarded once regardless of how many
 games achieve them.</p>
 
 <table class="info"><tr class="head"><th>Game points (can be earned for each combo)</th><th></th></tr>
-<tr><td class="name">reach level 12: 12 points</td></tr>
-<tr><td class="name">win: 20 points</td></tr>
+<tr><td class="name">reach level 10: 10 points</td></tr>
+<tr><td class="name">win: 15 points</td></tr>
 </table>
 <table class="info"><tr class="head" id="onetime"><th>One-time points (earned once in the
 competition)</th><th></th></tr>
-<tr><td class="name">collect the Orb of Zot in under 50 minutes: 25 points</td></tr>
-<tr><td class="name">enter Dis in under 40,000 turns: 20 points</td></tr>
+<tr><td class="name">6 points for each of these gods you get your first rune while worshipping: Lugonu, Cheibriados, Qazlal, Jiyva</td></tr>
 <tr><td class="name">10 points each for the following runes: slimy, silver, iron, icy, obsidian, bone</td></tr>
-<tr><td class="name">4 points for each of these gods you get your first rune while worshipping: Cheibriados, Vehumet, Dithmenos, Fedhas, Nemelex, Wu Jian, Sif Muna, Uskayaw</td></tr>
+<tr><td class="name">20 points for getting any rune from Pandemonium</td></tr>
+<tr><td class="name">collect the Orb of Zot in under 100 minutes: 20 points</td></tr>
+<tr><td class="name">enter Dis in under 30,000 turns: 20 points</td></tr>
 </table>
 
 <h2>Fair Crawling</h2>
 
-<p>Players using multiple accounts for extra attempts may be disqualified. Macros (including for multiple tabs/autoattacks) are allowed, but accounts playing at speeds implausible for humans may be disqualified. bhauth reserves the right to disqualify players for any reason.</p>
+<p>Players using multiple accounts for extra tournament entries may be disqualified. Macros (including for multiple tabs/autoattacks) are allowed, but accounts playing at speeds implausible for humans may be disqualified. bhauth reserves the right to disqualify players for any reason.</p>
 <p></p>
 """
 	return page(static=True, subhead="Rules", content = pagestr.format("0.22"))
