@@ -241,8 +241,8 @@ Yermak, Manman, Dynast, and NormalPerson7 come into view.</pre>
 <h2>Competition Format</h2>
 
 <ul>
-<li>8 combos to play that show off new content in bcrawl have been selected for this competition.</li>
-<li>Each combo has a 12 day window to play it. These combo times overlap.</li>
+<li>6 combos to play that show off new content in bcrawl have been selected for this competition.</li>
+<li>Each combo has a 9 day window to play it. These combo times overlap.</li>
 <li>You get <em>one</em> attempt to play each combo.</li>
 <li>The goal is to advance as far as possible (and win!) in each game, scoring
 points by reaching various in-game milestones.</li>
