@@ -259,7 +259,7 @@ points by reaching various in-game milestones.</li>
 
 <h2>How to Participate</h2>
 
-<p>To participate, just play bcrawl online on <a href="https://crawl.kelbi.org/">CKO (New York)</a>, <a href="https://underhound.eu:8080">CUE (Netherlands)</a>, or <a href="https://crawl.project357.org/">CPO (Australia)</a> during the tournament period.</p>
+<p>To participate, just play bcrawl online on <a href="https://crawl.kelbi.org/">CKO (New York)</a>, <a href="https://underhound.eu:8080">CUE (Netherlands)</a>, <a href="https://crawl.xtahua.com/">CXC (France)</a>, or <a href="https://crawl.project357.org/">CPO (Australia)</a> during the tournament period.</p>
 
 <h2>Credits</h2>
 <p>hosting, rules: bhauth<br>
